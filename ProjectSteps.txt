@@ -1,0 +1,188 @@
+## ✅ **Phase-by-Phase Project Implementation Guideline**
+
+---
+
+### 🔹 **PHASE 1: Project Setup**
+
+1. **Create a new Spring Boot project**
+
+   * Artifact ID: `clearance-system`
+   * Base package: `com.madebawojo.nysc.ppa.clearance`
+   * Dependencies:
+
+     * Spring Web
+     * Spring Data JPA
+     * Spring Security
+     * MySQL Driver
+     * Java Mail Sender
+     * Spring Boot DevTools
+     * Lombok
+     * Flyway (for DB migration)
+
+2. **Configure `application.yml`**
+
+   ```yaml
+   spring:
+     datasource:
+       url: jdbc:mysql://localhost:3306/clearance_db
+       username: root
+       password: your_password
+     jpa:
+       hibernate:
+         ddl-auto: update
+       show-sql: true
+     mail:
+       host: smtp.yourdomain.com
+       username: noreply@yourdomain.com
+       password: your_password
+       port: 587
+       properties.mail.smtp.auth: true
+       properties.mail.smtp.starttls.enable: true
+   ```
+
+---
+
+### 🔹 **PHASE 2: Core Modules Setup**
+
+#### 🗂 Directory Structure
+
+```
+com.madebawojo.nysc.ppa.clearance
+├── config
+├── controller
+├── dto
+├── entity
+├── exception
+├── repository
+├── security
+├── service
+├── util
+```
+
+---
+
+### 🔹 **PHASE 3: Security & Auth**
+
+* Implement Spring Security + JWT.
+* Setup 2FA using email OTP.
+* Secure endpoints by roles (`CORPER`, `ADMIN`, `SUPER_ADMIN`, `DEVELOPER`).
+* Create an `@CurrentUser` annotation (optional) to inject user details easily.
+
+---
+
+### 🔹 **PHASE 4: Build Entities & Repositories**
+
+Build entity classes exactly as outlined in **Section 3** of your spec:
+
+* `Corper`, `Admin`, `Unit`, `PPA`, `Clearance`, `ClearanceSettings`, `CorperUnit`, `EditRequest`
+
+Create matching Spring Data JPA repositories.
+
+---
+
+### 🔹 **PHASE 5: Business Logic Layer**
+
+Implement core services:
+
+* `AuthService`: Login, logout, onboarding
+* `CorperService`: Password change, edit requests, download clearance
+* `AdminService`: Onboard, block/unblock, handle edit requests
+* `ClearanceService`: Generate and validate PDFs
+* `UnitService`: Manage unit assignments
+* `NotificationService`: Email sending and alerts
+
+---
+
+### 🔹 **PHASE 6: Controllers & API Layer**
+
+Implement endpoints from **Section 5** of the document.
+
+Use proper HTTP status codes, validation, and response DTOs.
+
+---
+
+### 🔹 **PHASE 7: PDF Generation**
+
+Use [iText](https://itextpdf.com/) or [Flying Saucer + Thymeleaf](https://github.com/flyingsaucerproject/flyingsaucer) for:
+
+* Generating clearance slips
+* Adding stamp/signature from cloud URL
+* Include unit, name, stateCode, call-up number
+
+---
+
+### 🔹 **PHASE 8: Email & Notifications**
+
+Use Spring's JavaMailSender:
+
+* Send onboarding password to corpers
+* Send clearance availability notification
+* Notify on profile edit request decisions
+
+---
+
+### 🔹 **PHASE 9: Admin Features**
+
+* View & respond to corper requests
+* Manage `ClearanceSettings`
+* Filter corps by unit
+* Override clearance printing
+
+---
+
+### 🔹 **PHASE 10: Developer Setup Route**
+
+* Add dev-only endpoint (POST `/dev/super-admin/create`)
+* Protect with secret in header or IP-based restriction
+
+---
+
+### 🔹 **PHASE 11: Testing & Hardening**
+
+* Add unit & integration tests
+* Validate auth flows
+* Ensure endpoints respect roles & clearance rules
+* Add request logging, error handling, audit logging
+
+---
+
+### 🔹 **PHASE 12: Deployment Preparation**
+
+* Set up `.env` and production-ready `application.yml`
+* Containerize with Docker (optional)
+* Prepare MySQL schema with Flyway
+* Use cloud storage (e.g., Cloudinary or S3) for signature and stamp URLs
+
+---
+
+## ✅ Optional: Build Admin UI
+
+Use:
+
+* React, Angular, or simple HTML/Bootstrap
+* Tailored for Admin and Super Admin
+* Use REST API to integrate with backend
+
+---
+
+## ⚙ Tools Recap
+
+* **Backend**: Spring Boot
+* **DB**: MySQL + JPA
+* **PDF**: iText or Flying Saucer
+* **Auth**: Spring Security + JWT
+* **Email**: JavaMailSender
+* **Future Sched.**: Quartz Scheduler (for auto-enabling clearance)
+
+
+## Notes:
+
+🧠 **Recommendation**
+
+* You can keep your current single-PPA setup without any change, and later switch to multi-PPA by:
+
+* Ensuring every User → (SuperAdmin/Admin/Corper) → PPA link exists
+
+* Scoping all sensitive queries by ppaId
+
+* Creating separate frontends per PPA (if needed), or letting each PPA have a subdomain

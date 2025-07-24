@@ -8,6 +8,4 @@ public class PpaClearanceApplication {
     public static void main(String[] args) {
         SpringApplication.run(PpaClearanceApplication.class, args);
     }
-
-
 }
