@@ -85,6 +85,8 @@ public class CorperServiceImpl implements CorperService {
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .role(Role.CORPER)
                 .isBlocked(false)
                 .build();
@@ -94,8 +96,8 @@ public class CorperServiceImpl implements CorperService {
         // Create corper profile
         Corper corper = Corper.builder()
                 .user(user)
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
+//                .firstName(request.getFirstName())
+//                .lastName(request.getLastName())
                 .stateCode(request.getStateCode())
                 .callUpNumber(request.getCallUpNumber())
                 .unit(unitRepository.findById(request.getUnitId()).orElseThrow())
@@ -117,14 +119,15 @@ public class CorperServiceImpl implements CorperService {
             log.warn("Corper with user Id: {} attempted to update profile", userId);
            throw new UnauthorizedException("Profile update not allowed. Send a request to your admin");
         }
+        User user = corper.getUser();
 
         if(request.getFirstName() != null){
-            corper.setFirstName(request.getFirstName());
+            user.setFirstName(request.getFirstName());
             log.info("Corper first name updated to: {}", request.getFirstName());
         }
 
         if(request.getLastName() != null) {
-            corper.setLastName(request.getLastName());
+            user.setLastName(request.getLastName());
             log.info("Corper last name updated to: {}", request.getLastName());
         }
 

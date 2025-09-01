@@ -10,3 +10,24 @@ spring:
     user:
       name: sope
       password: testapp
+  logging:
+    level:
+      root:
+        debug
+global:
+  admin:
+    email: globaladmin@gmail.com
+    password: SuperSecret123
+    firstName: Mosopefoluwa
+    lastName: Adebawojo
+    role: GLOBAL_ADMIN
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: adebawojomosope@gmail.com
+  password:
+  smtp:
+    auth: true
+    starttls:
+      enable: true
+

@@ -46,14 +46,16 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .role(Role.SUPER_ADMIN)
                 .build();
         userRepository.save(user);
 
         SuperAdmin superAdmin = SuperAdmin.builder()
                 .user(user)
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
+//                .firstName(request.getFirstName())
+//                .lastName(request.getLastName())
                 .ppa(ppaRepository.findById(request.getPpaId())
                         .orElseThrow(() -> new ResourceNotFoundException("PPA not found with ID: " + request.getPpaId())))
                 .build();
@@ -102,11 +104,11 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         User user = superAdmin.getUser();
 
         if (request.getFirstName() != null){
-            superAdmin.setFirstName(request.getFirstName());
+            user.setFirstName(request.getFirstName());
             log.info("Admin first name updated to: {}", request.getFirstName());
         }
         if (request.getLastName() != null){
-            superAdmin.setLastName(request.getLastName());
+            user.setLastName(request.getLastName());
             log.info("Admin last name updated to: {}", request.getLastName());
         }
         if (request.getEmail() != null){

@@ -3,6 +3,7 @@ package com.madebawojo.nysc.ppa.clearance.controller;
 import com.madebawojo.nysc.ppa.clearance.dto.request.SuperAdminRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateSuperAdminRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
+import com.madebawojo.nysc.ppa.clearance.dto.response.CorperResponseDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.SuperAdminResponseDto;
 import com.madebawojo.nysc.ppa.clearance.service.impl.SuperAdminServiceImpl;
 import jakarta.validation.Valid;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,8 +27,10 @@ public class SuperAdminController {
 
     private final SuperAdminServiceImpl superAdminService;
 
+    @PreAuthorize("hasRole('GLOBAL_ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> createSuperAdmin(@Valid @RequestBody SuperAdminRequestDto request) {
+        log.info("######################GLOBAL ADMIN ACTION!!!###########################");
         log.info("Creating new Super Admin");
         SuperAdminResponseDto createdSuperAdmin = superAdminService.createSuperAdmin(request);
 
@@ -40,6 +45,7 @@ public class SuperAdminController {
 
     }
 
+    @PreAuthorize("hasRole('GLOBAL_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> getSuperAdminById(@PathVariable Long id) {
         log.info("Fetching Super Admin with ID: {}", id);
@@ -49,6 +55,14 @@ public class SuperAdminController {
         );
     }
 
+    // Get Authenticated Super Admin
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> retrieveAuthenticatedSuperAdmin(@AuthenticationPrincipal(expression = "id") Long userId) {
+        SuperAdminResponseDto response = superAdminService.getSuperAdminProfileById(userId);
+        return ResponseEntity.ok(ApiResponseStructure.success("Corper retrieved successfully", response, HttpStatus.OK.value()));
+    }
+
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponseStructure<List<SuperAdminResponseDto>>> getAllSuperAdmins() {
         log.info("Fetching all Super Admins");
@@ -58,6 +72,7 @@ public class SuperAdminController {
         );
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> updateSuperAdmin(@PathVariable Long id,
                                                                                    @Valid @RequestBody UpdateSuperAdminRequestDto request) {
@@ -68,6 +83,18 @@ public class SuperAdminController {
         );
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PutMapping("/me")
+    public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> updateAuthenticatedSuperAdmin(@AuthenticationPrincipal(expression = "id") Long id,
+                                                                                        @Valid @RequestBody UpdateSuperAdminRequestDto request) {
+        log.info("Updating authenticated Super Admin with ID: {}", id);
+        SuperAdminResponseDto response = superAdminService.updateSuperAdminProfile(id, request);
+        return ResponseEntity.ok(
+                ApiResponseStructure.success("Super Admin updated successfully", response, HttpStatus.OK.value())
+        );
+    }
+
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseStructure<String>> deleteSuperAdmin(@PathVariable Long id) {
         log.warn("Request to delete Super Admin with ID: {}", id);

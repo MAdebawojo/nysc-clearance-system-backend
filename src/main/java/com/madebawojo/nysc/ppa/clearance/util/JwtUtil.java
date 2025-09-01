@@ -1,6 +1,5 @@
-package com.madebawojo.nysc.ppa.clearance.security;
+package com.madebawojo.nysc.ppa.clearance.util;
 
-import com.madebawojo.nysc.ppa.clearance.util.AppConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -15,7 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtUtil {
     private static final String SECRET_KEY = AppConstants.SECRET_KEY;
 
 //    public String generateToken(

@@ -9,8 +9,8 @@ public class CorperMapper {
 
         return CorperResponseDto.builder()
                 .id(corper.getId())
-                .firstName(corper.getFirstName())
-                .lastName(corper.getLastName())
+//                .firstName(corper.getFirstName())
+//                .lastName(corper.getLastName())
                 .stateCode(corper.getStateCode())
                 .callUpNumber(corper.getCallUpNumber())
                 .unitName(corper.getUnit().getName())

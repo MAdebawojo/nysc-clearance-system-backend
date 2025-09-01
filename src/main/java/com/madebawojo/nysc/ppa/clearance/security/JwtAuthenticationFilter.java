@@ -1,8 +1,8 @@
-package com.madebawojo.nysc.ppa.clearance.config;
+package com.madebawojo.nysc.ppa.clearance.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
-import com.madebawojo.nysc.ppa.clearance.security.JwtService;
+import com.madebawojo.nysc.ppa.clearance.util.JwtUtil;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,13 +21,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor // creates a constructor for any final variable in the class
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(
@@ -39,19 +43,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
-        if(authHeader == null  || !authHeader.startsWith("Bearer")){
-            filterChain.doFilter(request, response);
-            writeErrorResponse(response, "Authorization header missing or invalid", HttpServletResponse.SC_UNAUTHORIZED);
+        if(authHeader == null  || !authHeader.startsWith("Bearer ")){
+//            filterChain.doFilter(request, response);
+            writeApiResponse(response, "Authorization header missing or invalid", HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         jwt = authHeader.substring(7);
 
         try{
-            userEmail = jwtService.extractUsername(jwt); // username here is unique value attached to a user that will be used along with password for authentication
+            userEmail = jwtUtil.extractUsername(jwt); // username here is unique value attached to a user that will be used along with password for authentication
         } catch (JwtException | IllegalArgumentException e){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            writeErrorResponse(response, "Invalid or expired token", HttpServletResponse.SC_UNAUTHORIZED);
+            writeApiResponse(response, "Invalid or expired token", 401);
             return;
         }
 
@@ -60,12 +63,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             } catch (UsernameNotFoundException e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                writeErrorResponse(response, "User not found", HttpServletResponse.SC_UNAUTHORIZED);
+                writeApiResponse(response, "User not found", 401);
                 return;
             }
 
-            if(jwtService.isTokenValid(jwt, userDetails)){
+            if(jwtUtil.isTokenValid(jwt, userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -78,6 +80,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.startsWith("/h2-console") || path.startsWith("/api/v1/auth");
+    }
+
+    private void writeApiResponse(HttpServletResponse response, String message, int status) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("success", false);
+        body.put("message", message);
+        body.put("data", null);
+        body.put("errors", null);
+        body.put("statusCode", status);
+        body.put("timestamp", Instant.now());
+
+        objectMapper.writeValue(response.getOutputStream(), body);
     }
 
     private void writeErrorResponse(HttpServletResponse response, String message, int status) throws IOException {

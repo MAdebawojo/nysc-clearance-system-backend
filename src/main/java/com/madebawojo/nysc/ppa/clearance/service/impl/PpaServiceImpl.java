@@ -69,7 +69,7 @@ public class PpaServiceImpl implements PpaService {
 
         if (dto.getPpaAddress() != null) {
             ppa.setAddress(dto.getPpaAddress());
-            log.info("PPA address updated to: {}", dto.getPpaName());
+            log.info("PPA address updated to: {}", dto.getPpaAddress());
         }
 
         ppaRepository.save(ppa);

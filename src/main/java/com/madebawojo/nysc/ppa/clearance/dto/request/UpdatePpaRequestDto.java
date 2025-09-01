@@ -1,5 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.dto.request;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;

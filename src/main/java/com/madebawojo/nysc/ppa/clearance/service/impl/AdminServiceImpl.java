@@ -47,6 +47,8 @@ public class AdminServiceImpl implements AdminService {
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .role(Role.ADMIN)
                 .isBlocked(false)
                 .build();
@@ -55,8 +57,8 @@ public class AdminServiceImpl implements AdminService {
 
         Admin admin = Admin.builder()
                 .user(user)
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
+//                .firstName(request.getFirstName())
+//                .lastName(request.getLastName())
                 .unit(unitRepository.findById(request.getUnitId())
                         .orElseThrow(() -> new ResourceNotFoundException("Unit not found with ID: " + request.getUnitId())))
                 .ppa(ppaRepository.findById(request.getPpaId())
@@ -129,12 +131,12 @@ public class AdminServiceImpl implements AdminService {
         }
 
         if (request.getFirstName() != null) {
-            admin.setFirstName(request.getFirstName());
+            user.setFirstName(request.getFirstName());
             log.info("Admin first name updated to: {}", request.getFirstName());
         }
 
         if (request.getLastName() != null) {
-            admin.setLastName(request.getLastName());
+            user.setLastName(request.getLastName());
             log.info("Admin last name updated to: {}", request.getLastName());
         }
 

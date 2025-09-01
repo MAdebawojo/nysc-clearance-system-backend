@@ -22,11 +22,11 @@ public class Corper {
     @JoinColumn(name = "id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
+//    @Column(nullable = false)
+//    private String firstName;
+//
+//    @Column(nullable = false)
+//    private String lastName;
 
     @Column(unique = true, nullable = false)
     private String stateCode;

@@ -36,9 +36,11 @@ public class Ppa {
     @ToString.Exclude
     private List<Unit> units;
 
-    @OneToMany(mappedBy = "ppa", cascade = CascadeType.ALL, orphanRemoval = true)     // One PPA can have multiple super-admins
-    @ToString.Exclude
-    private List<SuperAdmin> superAdmins;
+//    @OneToMany(mappedBy = "ppa", cascade = CascadeType.ALL, orphanRemoval = true)     // One PPA can have multiple super-admins
+    @OneToOne(mappedBy = "ppa", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @ToString.Exclude
+    private SuperAdmin superAdmin;
+//    private List<SuperAdmin> superAdmins;
 
     @OneToMany(mappedBy = "ppa", cascade = CascadeType.ALL, orphanRemoval = true)     // One PPA can have multiple admins
     @ToString.Exclude

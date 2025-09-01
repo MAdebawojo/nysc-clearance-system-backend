@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,8 +24,12 @@ public class PpaController {
 
     private final PpaService ppaService;
 
+    @PreAuthorize("hasRole('GLOBAL_ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponseStructure<PpaResponseDto>> createPpa(@RequestBody PpaRequestDto dto) {
+        log.info("######################GLOBAL ADMIN ACTION!!!###########################");
+        log.info("Creating PPA...");
+
         PpaResponseDto createdPpa = ppaService.createPpa(dto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -36,28 +41,43 @@ public class PpaController {
                 .body(ApiResponseStructure.success("PPA created successfully", createdPpa, HttpStatus.CREATED.value()));
     }
 
-
+    @PreAuthorize("hasRole('GLOBAL_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseStructure<PpaResponseDto>> getPpaById(@PathVariable Long id) {
+        log.info("######################GLOBAL ADMIN ACTION!!!###########################");
+        log.info("Retrieving PPA with ID: {}", id);
+
         PpaResponseDto ppa = ppaService.getPpaById(id);
         return ResponseEntity.ok(ApiResponseStructure.success("PPA retrieved", ppa, HttpStatus.OK.value()));
     }
 
+    @PreAuthorize("hasRole('GLOBAL_ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponseStructure<List<PpaResponseDto>>> getAllPpas() {
+        log.info("######################GLOBAL ADMIN ACTION!!!###########################");
+        log.info("Retrieving all PPAs...");
+
         List<PpaResponseDto> list = ppaService.getAllPpas();
         return ResponseEntity.ok(ApiResponseStructure.success("All PPAs retrieved", list, HttpStatus.OK.value()));
     }
 
+    @PreAuthorize("hasRole('GLOBAL_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseStructure<PpaResponseDto>> updatePpa(@PathVariable Long id,
                                                                           @RequestBody UpdatePpaRequestDto dto) {
+        log.info("######################GLOBAL ADMIN ACTION!!!###########################");
+        log.info("Updating PPA with ID: {}", id);
+
         PpaResponseDto updated = ppaService.updatePpa(id, dto);
         return ResponseEntity.ok(ApiResponseStructure.success("PPA updated successfully", updated, HttpStatus.OK.value()));
     }
 
+    @PreAuthorize("hasRole('GLOBAL_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseStructure<?>> deletePpa(@PathVariable Long id) {
+        log.info("######################GLOBAL ADMIN ACTION!!!###########################");
+        log.warn("Sending request to delete PPA, with ID: {}", id);
+
         ppaService.deletePpa(id);
         return ResponseEntity.ok(ApiResponseStructure.success("PPA deleted successfully", null, HttpStatus.OK.value()));
     }

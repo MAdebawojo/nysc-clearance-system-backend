@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,6 +23,7 @@ public class UnitController {
 
     private final UnitService unitService;
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponseStructure<UnitResponseDto>> createUnit(@RequestBody UnitRequestDto dto) {
         log.info("Creating new unit");
@@ -37,12 +39,14 @@ public class UnitController {
                 .body(ApiResponseStructure.success("Unit created successfully", createdUnit, HttpStatus.CREATED.value()));
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseStructure<UnitResponseDto>> getUnitById(@PathVariable Long id) {
         UnitResponseDto unit = unitService.getUnitById(id);
         return ResponseEntity.ok(ApiResponseStructure.success("Unit retrieved", unit, HttpStatus.OK.value()));
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/ppa/{ppaId}")
     public ResponseEntity<ApiResponseStructure<List<UnitResponseDto>>> getUnitsByPpa(@PathVariable Long ppaId) {
         List<UnitResponseDto> units = unitService.getAllUnitsInPpa(ppaId);

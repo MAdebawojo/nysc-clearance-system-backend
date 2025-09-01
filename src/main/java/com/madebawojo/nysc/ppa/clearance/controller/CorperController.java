@@ -89,8 +89,8 @@ public class CorperController {
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/ppa/{ppaId}")
     public ResponseEntity<ApiResponseStructure<List<CorperResponseDto>>> getCorpersInPpa(@PathVariable Long ppaId) {
-        List<CorperResponseDto> corpers = corperService.getAllCorpersInUnit(ppaId);
-        return ResponseEntity.ok(ApiResponseStructure.success("Corpers in unit retrieved successfully", corpers, HttpStatus.OK.value()));
+        List<CorperResponseDto> corpers = corperService.getAllCorpersInPpa(ppaId);
+        return ResponseEntity.ok(ApiResponseStructure.success("Corpers in PPA retrieved successfully", corpers, HttpStatus.OK.value()));
     }
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -107,8 +107,9 @@ public class CorperController {
         return ResponseEntity.ok(ApiResponseStructure.success("Corper unblocked successfully", null, HttpStatus.NO_CONTENT.value()));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseStructure<Void>> deleteAdmin(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseStructure<Void>> deleteCorperByAdmin(@PathVariable Long id) {
         corperService.deleteCorper(id);
         return ResponseEntity.ok(
                 ApiResponseStructure.success("Admin deleted successfully", null, HttpStatus.NO_CONTENT.value())

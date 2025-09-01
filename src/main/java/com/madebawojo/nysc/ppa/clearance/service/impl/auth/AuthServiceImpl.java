@@ -1,21 +1,19 @@
-package com.madebawojo.nysc.ppa.clearance.service.impl;
+package com.madebawojo.nysc.ppa.clearance.service.impl.auth;
 
 import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.UnauthorizedException;
-import com.madebawojo.nysc.ppa.clearance.security.JwtService;
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
 import com.madebawojo.nysc.ppa.clearance.dto.request.AuthenticationRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.AuthenticationResponseDto;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
-import com.madebawojo.nysc.ppa.clearance.service.servicecontract.AuthenticationService;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,15 +22,14 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl implements AuthenticationService {
+public class AuthServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenServiceImpl refreshService;
 
     @Override
-    public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
+    public AuthenticationResponseDto authenticate(AuthenticationRequestDto request, String ip, String ua) {
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -44,20 +41,55 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new UnauthorizedException("Invalid email or password");
         }
 
-        var user = userRepository.findByEmail(request.getEmail())
-                            .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + request.getEmail()));
+        var user = getUserByEmail(request.getEmail());
 
-        Map<String, Object> extraClaims = generateClaims(user);
-        var jwtToken = jwtService.generateToken(extraClaims, user);
+        TokenResponse tokenResponse = refreshService.issueAuthTokens(user, ip, ua);
 
         return AuthenticationResponseDto.builder()
-                .token(jwtToken)
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .email(user.getEmail())
                 .role(user.getRole())
+                .authTokens(tokenResponse)
                 .build();
     }
 
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                            .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+    }
 
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userId));
+    }
+
+
+    //    @Override
+//    public AuthenticationResponseDto authenticate(User user, String ip, String ua) {
+//        try{
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            user.getEmail(),
+//                            user.getPassword()
+//                    )
+//            );
+//        } catch (BadCredentialsException ex){
+//            throw new UnauthorizedException("Invalid email or password");
+//        }
+//
+////        var user = getUserByEmail(requestUser.getEmail());
+//
+////        Map<String, Object> extraClaims = generateClaims(user);
+////        var jwtToken = jwtUtil.generateToken(extraClaims, user);
+//        return refreshService.issueFor(user, ip, ua);
+//
+////        return AuthenticationResponseDto.builder()
+////                .token(jwtToken)
+////                .email(user.getEmail())
+////                .role(user.getRole())
+////                .build();
+//    }
     //    public AuthenticationResponseDto register(RegisterRequest request) {
 //        var user = User.builder()
 //                .email(request.getEmail())

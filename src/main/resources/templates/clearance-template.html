@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letterhead Example</title>
+    <style>
+        /* General body and page styles */
+        body {
+          font-family: 'Calibri', sans-serif;
+          margin: 0;
+          padding: 0;
+          line-height: 1.5;
+        }
+
+        /* Header styles */
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          padding: 20px;
+          border-bottom: 2px solid #000;
+        }
+
+        .header .logo {
+          width: 120px; /* Adjust logo size */
+        }
+
+        .header .company-info {
+          text-align: right;
+          font-size: 14px;
+          line-height: 1.3;
+        }
+
+        .header .company-info p {
+          margin: 0;
+          padding: 2px 0;
+        }
+
+        /* Date and recipient address section */
+        .date-address {
+          margin: 20px 40px;
+          font-size: 14px;
+        }
+
+        .date-address .date {
+          font-weight: bold;
+        }
+
+        .date-address .recipient {
+          margin-top: 15px;
+        }
+
+        /* Main letter content */
+        .content {
+          margin: 20px 40px;
+          font-size: 14px;
+        }
+
+        .content p {
+          margin: 10px 0;
+        }
+
+        .content .document-title{
+            text-decoration: underline;
+            text-align: center;
+        }
+
+        .content .document-salutation{
+            margin-top: 80px;
+        }
+
+        /* Signature and Stamp */
+        /* .signature-stamp {
+          display: flex;
+          align-items: center;
+          margin-top: 50px;
+          justify-content: center;
+        } */
+
+        .signature-stamp, .corper-details {
+          margin-top: 50px;
+        }
+
+        /* .signature {
+          width: 150px;
+          margin-right: 20px;
+        }
+
+        .stamp {
+          width: 100px;
+        } */
+
+        /* Footer with company contact info */
+        .footer {
+          position: fixed;
+          bottom: 30mm;
+          width: 100%;
+          font-size: 10px;
+          text-align: center;
+          /* padding-right: 40px; */
+          color: #333;
+        }
+
+        .footer p {
+          margin: 2px 0;
+        }
+
+        /* Print styles */
+        @media print {
+          body {
+            margin: 0;
+            padding: 0;
+          }
+
+          .header {
+            display: block;
+            margin-bottom: 15mm;
+          }
+
+          .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding-right: 40px;
+            color: #333;
+          }
+
+          .content {
+            margin: 20px 40px;
+          }
+
+          /* Ensure content fits and doesn't overlap */
+          .content p {
+            font-size: 12px;
+          }
+
+          .date-address {
+            font-size: 12px;
+          }
+        }
+    </style>
+</head>
+<body>
+<!-- Header with logo and company info -->
+<div class="header">
+    <img class="logo" src="company_logo.png" alt="Company Logo">
+    <div class="company-info">
+        <p><strong>eTranzact International Plc</strong></p>
+        <p>RC: 460713</p>
+        <p>Lagos, Nigeria</p>
+    </div>
+</div>
+
+<!-- Date and recipient information -->
+<div class="date-address">
+    <p class="date">31st July 2025</p>
+    <p class="recipient">
+        The State Coordinator,<br>
+        NYSC Secretariat,<br>
+        Babs Animashaun Road,<br>
+        (Old Census Office), Surulere,<br>
+        P.M.B. 1053, Sabo-Yaba.<br>
+        Lagos State.
+    </p>
+</div>
+
+<!-- Body content of the letter -->
+<div class="content">
+    <p>Dear Sir,</p>
+    <p class="document-title"><strong>CLEARANCE LETTER FOR THE MONTH OF AUGUST 2025</strong></p>
+    <p>This is to certify that <strong>Adebawojo Mosopefoluwa Oluwasegunfunmi</strong> with State code: <strong>LA/24C/10929</strong> posted to eTranzact International has been diligent in discharging his duty in the Organization and should be paid his allowance for the month of August.</p>
+    <div class="corper-details">
+        <p>Name: <strong>Adebawojo Mosopefoluwa Oluwasegunfunmi</strong></p>
+        <p>State Code: <strong>LA/24C/10929</strong></p>
+        <p>Call-up No: <strong>NYSC/BCU/2024/361847</strong></p>
+    </div>
+
+    <div class="document-salutation">
+        <p>Regards,</p>
+        <!-- Signature and Stamp Section -->
+        <div class="signature-stamp">
+            <img class="signature" src="signature_image.png" alt="Signature">
+            <img class="stamp" src="stamp_image.png" alt="Stamp">
+        </div>
+        <p>Abidun Ojo</p>
+        <p>Head Human Resource</p>
+    </div>
+
+</div>
+
+
+<!-- Footer with company contact info -->
+<div class="footer">
+    <p>Address: 4th & 5th Floors, Fortune Towers, 27/28 Adeyemi Ajakaye Street, Victoria Island, Lagos. <br> Telephone: 020/1011006 | Email: info@etranzact.com</p>
+</div>
+</body>
+</html>

@@ -9,8 +9,8 @@ public class AdminMapper {
         return AdminResponseDto.builder()
                 .id(admin.getId())
                 .email(admin.getUser().getEmail())
-                .firstName(admin.getFirstName())
-                .lastName(admin.getLastName())
+//                .firstName(admin.getFirstName())
+//                .lastName(admin.getLastName())
                 .unitName(admin.getUnit().getName())
                 .ppaName(admin.getPpa().getName())
                 .build();

@@ -4,5 +4,6 @@ public enum Role {
     CORPER,
     ADMIN,
     SUPER_ADMIN,
+    GLOBAL_ADMIN,
     DEVELOPER
 }

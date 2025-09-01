@@ -9,8 +9,8 @@ public class SuperAdminMapper {
         return SuperAdminResponseDto.builder()
                 .id(superAdmin.getId())
                 .email(superAdmin.getUser().getEmail())
-                .firstName(superAdmin.getFirstName())
-                .lastName(superAdmin.getLastName())
+//                .firstName(superAdmin.getFirstName())
+//                .lastName(superAdmin.getLastName())
                 .ppaName(superAdmin.getPpa().getName())
                 .build();
     }
