@@ -1,4 +1,4 @@
-package com.madebawojo.nysc.ppa.clearance.service.servicecontract;
+package com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth;
 
 import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequestDto;
 

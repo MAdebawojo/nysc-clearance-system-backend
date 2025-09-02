@@ -1,4 +1,4 @@
-package com.madebawojo.nysc.ppa.clearance.service.impl;
+package com.madebawojo.nysc.ppa.clearance.service.impl.clearance;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
@@ -13,7 +13,7 @@ import com.madebawojo.nysc.ppa.clearance.repository.AdminRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UnitRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
-import com.madebawojo.nysc.ppa.clearance.service.servicecontract.AdminService;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,15 +50,13 @@ public class AdminServiceImpl implements AdminService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .role(Role.ADMIN)
-                .isBlocked(false)
+//                .isBlocked(false)
                 .build();
         userRepository.save(user);
         log.info("User account created successfully for admin: {}", request.getEmail());
 
         Admin admin = Admin.builder()
                 .user(user)
-//                .firstName(request.getFirstName())
-//                .lastName(request.getLastName())
                 .unit(unitRepository.findById(request.getUnitId())
                         .orElseThrow(() -> new ResourceNotFoundException("Unit not found with ID: " + request.getUnitId())))
                 .ppa(ppaRepository.findById(request.getPpaId())
@@ -67,7 +65,7 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.save(admin);
         log.info("Admin profile created successfully for user: {}", user.getEmail());
 
-        return AdminMapper.toDto(admin);
+        return AdminMapper.toDto(user, admin);
     }
 
     @Override
@@ -79,7 +77,7 @@ public class AdminServiceImpl implements AdminService {
                     return new ResourceNotFoundException("Admin profile not found for user ID: " + userId);
                 });
         log.info("Admin profile retrieved successfully for user ID: {}", userId);
-        return AdminMapper.toDto(admin);
+        return AdminMapper.toDto(admin.getUser(), admin);
     }
 
     @Override
@@ -99,7 +97,7 @@ public class AdminServiceImpl implements AdminService {
     public List<AdminResponseDto> getAllAdmins() {
         log.info("Fetching list of all admins");
         List<AdminResponseDto> admins = adminRepository.findAll().stream()
-                .map(AdminMapper::toDto)
+                .map(admin -> AdminMapper.toDto(admin.getUser(), admin))
                 .collect(Collectors.toList());
         log.info("Total admins retrieved: {}", admins.size());
         return admins;
@@ -144,7 +142,7 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.save(admin);
         log.info("Admin profile with ID: {} updated successfully", adminId);
 
-        return AdminMapper.toDto(admin);
+        return AdminMapper.toDto(admin.getUser(), admin);
     }
 
     @Override

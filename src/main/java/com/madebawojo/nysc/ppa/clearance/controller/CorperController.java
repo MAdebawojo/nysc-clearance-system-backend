@@ -2,9 +2,8 @@ package com.madebawojo.nysc.ppa.clearance.controller;
 
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.dto.request.CorperRequestDto;
-import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.CorperResponseDto;
-import com.madebawojo.nysc.ppa.clearance.service.impl.CorperServiceImpl;
+import com.madebawojo.nysc.ppa.clearance.service.impl.clearance.CorperServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -127,8 +126,8 @@ public class CorperController {
 //import com.madebawojo.nysc.ppa.clearance.dto.request.CorperRequestDto;
 //import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequest;
 //import com.madebawojo.nysc.ppa.clearance.dto.response.CorperResponseDto;
-//import com.madebawojo.nysc.ppa.clearance.service.impl.CorperServiceImpl;
-//import com.madebawojo.nysc.ppa.clearance.service.servicecontract.CorperService;
+//import com.madebawojo.nysc.ppa.clearance.service.impl.clearance.CorperServiceImpl;
+//import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.CorperService;
 //import jakarta.validation.Valid;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.http.HttpStatus;

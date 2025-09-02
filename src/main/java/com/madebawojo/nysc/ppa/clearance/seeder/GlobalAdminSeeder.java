@@ -30,8 +30,8 @@ public class GlobalAdminSeeder implements CommandLineRunner {
             String hashedPassword = encoder.encode(gaProperties.getPassword());
 
             jdbcTemplate.update(
-                    "INSERT INTO users (email, password, first_name, last_name, role, is_blocked) VALUES (?, ?, ?, ?, ?, ?)",
-                    gaProperties.getEmail(), hashedPassword, gaProperties.getFirstName(), gaProperties.getLastName(), gaProperties.getRole(), false
+                    "INSERT INTO users (email, password, first_name, last_name, role, is_blocked, is_verified) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    gaProperties.getEmail(), hashedPassword, gaProperties.getFirstName(), gaProperties.getLastName(), gaProperties.getRole(), false, true
             );
             log.info("✅ Global admin seeded with email: {}", gaProperties.getEmail());
         } else {

@@ -197,9 +197,10 @@ Done: Create a GLOBAL_ADMIN role for creating PPA and SuperAdmin
 Done: Create HTML template for the Clearance docs
 Done: Research on refresh tokens
 Done: Implement Logout controller
+Done: Integrate Email  for new users
+
 
 ToDo: Research on how to implement permissions so that admins can be given so admins can be role of a unit head or an hr
-ToDo: Integrate Email and random passwords generation for new users
 ToDo: Research on how to use thymeleaf for the generation of docs or if I can use raw html and css
 ToDo: Add Swagger Docs
 ToDo: Implement an endpoint to view clearance docs for a specific corper that has been cleared

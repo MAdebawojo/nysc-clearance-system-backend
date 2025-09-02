@@ -1,4 +1,4 @@
-package com.madebawojo.nysc.ppa.clearance.service.impl;
+package com.madebawojo.nysc.ppa.clearance.service.impl.clearance;
 
 import com.madebawojo.nysc.ppa.clearance.core.exception.UserAlreadyExistsException;
 import com.madebawojo.nysc.ppa.clearance.dto.mapper.SuperAdminMapper;
@@ -12,7 +12,7 @@ import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundExceptio
 import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.SuperAdminRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
-import com.madebawojo.nysc.ppa.clearance.service.servicecontract.SuperAdminService;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.SuperAdminService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,8 +54,6 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
         SuperAdmin superAdmin = SuperAdmin.builder()
                 .user(user)
-//                .firstName(request.getFirstName())
-//                .lastName(request.getLastName())
                 .ppa(ppaRepository.findById(request.getPpaId())
                         .orElseThrow(() -> new ResourceNotFoundException("PPA not found with ID: " + request.getPpaId())))
                 .build();
@@ -63,7 +61,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
         log.info("SuperAdmin created successfully with ID: {}", superAdmin.getId());
 
-        return SuperAdminMapper.toDto(superAdmin);
+        return SuperAdminMapper.toDto(user, superAdmin);
     }
 
     @Override
@@ -71,7 +69,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         log.info("Fetching all SuperAdmins");
 
         List<SuperAdminResponseDto> superAdmins = superAdminRepository.findAll().stream()
-                .map(SuperAdminMapper::toDto)
+                .map(superAdmin -> SuperAdminMapper.toDto(superAdmin.getUser(), superAdmin))
                 .collect(Collectors.toList());
 
         log.info("Total super admins retrieved: {}", superAdmins.size());
@@ -88,7 +86,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
                     return new ResourceNotFoundException("SuperAdmin profile not found for ID: " + userId);
                 });
 
-        return SuperAdminMapper.toDto(superAdmin);
+        return SuperAdminMapper.toDto(superAdmin.getUser(), superAdmin);
     }
 
     @Override
@@ -123,7 +121,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         userRepository.save(user);
         log.info("SuperAdmin profile updated successfully for user ID: {}", userId);
 
-        return SuperAdminMapper.toDto(superAdmin);
+        return SuperAdminMapper.toDto(user, superAdmin);
     }
 
     @Override

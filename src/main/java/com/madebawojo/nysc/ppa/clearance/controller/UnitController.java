@@ -3,7 +3,8 @@ package com.madebawojo.nysc.ppa.clearance.controller;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.dto.request.UnitRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.UnitResponseDto;
-import com.madebawojo.nysc.ppa.clearance.service.servicecontract.UnitService;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.UnitService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class UnitController {
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping
-    public ResponseEntity<ApiResponseStructure<UnitResponseDto>> createUnit(@RequestBody UnitRequestDto dto) {
+    public ResponseEntity<ApiResponseStructure<UnitResponseDto>> createUnit(@Valid @RequestBody UnitRequestDto dto) {
         log.info("Creating new unit");
 
         UnitResponseDto createdUnit = unitService.createUnit(dto);

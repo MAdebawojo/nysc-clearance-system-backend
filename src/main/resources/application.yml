@@ -14,6 +14,18 @@ spring:
     level:
       root:
         debug
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: adebawojomosope@gmail.com
+    password: xnao ekrg doum czwa
+    properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+              required: true
 global:
   admin:
     email: globaladmin@gmail.com
@@ -21,13 +33,3 @@ global:
     firstName: Mosopefoluwa
     lastName: Adebawojo
     role: GLOBAL_ADMIN
-mail:
-  host: smtp.gmail.com
-  port: 587
-  username: adebawojomosope@gmail.com
-  password: xnao ekrg doum czwa
-  smtp:
-    auth: true
-    starttls:
-      enable: true
-

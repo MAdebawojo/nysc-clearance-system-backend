@@ -1,4 +1,4 @@
-package com.madebawojo.nysc.ppa.clearance.service.impl;
+package com.madebawojo.nysc.ppa.clearance.service.impl.auth;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
@@ -7,7 +7,7 @@ import com.madebawojo.nysc.ppa.clearance.core.exception.UnauthorizedException;
 import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequestDto;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
-import com.madebawojo.nysc.ppa.clearance.service.servicecontract.UserService;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth.UserService;
 import com.madebawojo.nysc.ppa.clearance.util.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
 //import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequestDto;
 //import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 //import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
-//import com.madebawojo.nysc.ppa.clearance.service.servicecontract.UserService;
+//import com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth.UserService;
 //import com.madebawojo.nysc.ppa.clearance.util.AppConstants;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.security.crypto.password.PasswordEncoder;

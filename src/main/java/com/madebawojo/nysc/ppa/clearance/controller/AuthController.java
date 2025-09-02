@@ -5,8 +5,10 @@ import com.madebawojo.nysc.ppa.clearance.dto.request.RefreshTokenRequest;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.dto.response.AuthenticationResponseDto;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.AuthServiceImpl;
+import com.madebawojo.nysc.ppa.clearance.service.impl.auth.EmailVerificationServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.RefreshTokenServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,10 +22,11 @@ public class AuthController {
 
     private final AuthServiceImpl authService;
     private final RefreshTokenServiceImpl refreshService;
+    private final EmailVerificationServiceImpl emailVerificationServiceImpl;
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponseStructure<AuthenticationResponseDto>> login(
-            @RequestBody AuthenticationRequestDto req,
+            @Valid @RequestBody AuthenticationRequestDto req,
             HttpServletRequest servletReq
     ) {
         AuthenticationResponseDto authResponse = authService.authenticate(
@@ -45,6 +48,12 @@ public class AuthController {
                 token, servletReq.getRemoteAddr(), servletReq.getHeader("User-Agent")
         );
         return ResponseEntity.ok(ApiResponseStructure.success("Token refreshed", out, 200));
+    }
+
+    @GetMapping("/verify-email")
+    public ResponseEntity<ApiResponseStructure<String>> verifyEmail(@RequestParam String token) {
+        emailVerificationServiceImpl.verifyUserByToken(token);
+        return ResponseEntity.ok(ApiResponseStructure.success("Email verified successfully", null, 200));
     }
 
     @PostMapping("/logout")

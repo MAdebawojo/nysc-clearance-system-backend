@@ -1,4 +1,4 @@
-package com.madebawojo.nysc.ppa.clearance.service.impl;
+package com.madebawojo.nysc.ppa.clearance.service.impl.clearance;
 
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
 import com.madebawojo.nysc.ppa.clearance.dto.mapper.PpaMapper;
@@ -7,7 +7,7 @@ import com.madebawojo.nysc.ppa.clearance.dto.request.UpdatePpaRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.PpaResponseDto;
 import com.madebawojo.nysc.ppa.clearance.entity.Ppa;
 import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
-import com.madebawojo.nysc.ppa.clearance.service.servicecontract.PpaService;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.PpaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -4,7 +4,7 @@ import com.madebawojo.nysc.ppa.clearance.dto.request.UpdatePpaRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.dto.request.PpaRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.PpaResponseDto;
-import com.madebawojo.nysc.ppa.clearance.service.servicecontract.PpaService;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.PpaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,5 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.Instant;
 import java.util.List;
 
@@ -9,6 +11,7 @@ public class ApiResponseStructure<T> {
     private String message;
     private T data;
     private List<String> errors;
+    @JsonProperty("status_code")
     private int statusCode;
     private Instant timestamp;
 

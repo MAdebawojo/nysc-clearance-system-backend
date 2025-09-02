@@ -1,4 +1,4 @@
-package com.madebawojo.nysc.ppa.clearance.service.impl;
+package com.madebawojo.nysc.ppa.clearance.service.impl.clearance;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
@@ -15,7 +15,8 @@ import com.madebawojo.nysc.ppa.clearance.repository.CorperRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UnitRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
-import com.madebawojo.nysc.ppa.clearance.service.servicecontract.CorperService;
+import com.madebawojo.nysc.ppa.clearance.service.impl.auth.EmailVerificationServiceImpl;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.CorperService;
 import com.madebawojo.nysc.ppa.clearance.util.AppConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class CorperServiceImpl implements CorperService {
     private final UserRepository userRepository;
     private final UnitRepository unitRepository;
     private final PpaRepository ppaRepository;
+    private final EmailVerificationServiceImpl emailVerificationServiceImpl;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -44,23 +46,23 @@ public class CorperServiceImpl implements CorperService {
     public CorperResponseDto getCorperById(Long userId) {
         Corper corper = corperRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Corper profile not found for user User ID: " + userId));
-
+        User user = corper.getUser();
         log.info("Corper retrieved successfully. User ID: {}", userId);
-        return CorperMapper.toDto(corper);
+        return CorperMapper.toDto(user, corper);
     }
 
 
     @Override
     public List<CorperResponseDto> getAllCorpersInUnit(Long unitId) {
         return corperRepository.findAllByUnitId(unitId).stream()
-                .map(CorperMapper::toDto)
+                .map(corper -> CorperMapper.toDto(corper.getUser(), corper))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CorperResponseDto> getAllCorpersInPpa(Long ppaId) {
         return corperRepository.findAllByPpaId(ppaId).stream()
-                .map(CorperMapper::toDto)
+                .map(corper -> CorperMapper.toDto(corper.getUser(), corper))
                 .collect(Collectors.toList());
     }
 
@@ -88,7 +90,7 @@ public class CorperServiceImpl implements CorperService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .role(Role.CORPER)
-                .isBlocked(false)
+//                .isBlocked(false)
                 .build();
         userRepository.save(user);
         log.info("User has been created successfully. Attempting to create profile for the user...");
@@ -96,8 +98,6 @@ public class CorperServiceImpl implements CorperService {
         // Create corper profile
         Corper corper = Corper.builder()
                 .user(user)
-//                .firstName(request.getFirstName())
-//                .lastName(request.getLastName())
                 .stateCode(request.getStateCode())
                 .callUpNumber(request.getCallUpNumber())
                 .unit(unitRepository.findById(request.getUnitId()).orElseThrow())
@@ -106,8 +106,8 @@ public class CorperServiceImpl implements CorperService {
                 .build();
         corperRepository.save(corper);
         log.info("Corper user profile has been created successfully");
-
-        return CorperMapper.toDto(corper);
+        emailVerificationServiceImpl.generateVerificationToken(user);
+        return CorperMapper.toDto(user, corper);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class CorperServiceImpl implements CorperService {
         corperRepository.save(corper);
 
         log.info("Corper profile updated. User ID: {}", userId);
-        return CorperMapper.toDto(corper);
+        return CorperMapper.toDto(user, corper);
     }
 
     @Override

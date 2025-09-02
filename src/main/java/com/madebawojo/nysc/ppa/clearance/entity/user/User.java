@@ -1,6 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.entity.user;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
+import com.madebawojo.nysc.ppa.clearance.entity.VerificationToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Admin;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Corper;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.SuperAdmin;
@@ -16,6 +17,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,8 +49,17 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+    @Builder.Default
     @Column(nullable = false)
-    private boolean isBlocked;
+    private boolean isBlocked = false;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean isVerified = false;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
