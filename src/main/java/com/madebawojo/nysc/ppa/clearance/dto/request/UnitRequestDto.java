@@ -13,5 +13,6 @@ public class UnitRequestDto {
     private String name;
 
     @JsonProperty("ppa_id")
+    @NotBlank(message = "PPA id is required")
     private Long ppaId;
 }

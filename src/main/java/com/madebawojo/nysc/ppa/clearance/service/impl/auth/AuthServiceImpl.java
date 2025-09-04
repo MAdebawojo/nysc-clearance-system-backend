@@ -10,6 +10,7 @@ import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthenticationService {
@@ -45,6 +46,7 @@ public class AuthServiceImpl implements AuthenticationService {
 
         TokenResponse tokenResponse = refreshService.issueAuthTokens(user, ip, ua);
 
+        log.info("User {} is authenticated", user.getEmail());
         return AuthenticationResponseDto.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -55,11 +57,13 @@ public class AuthServiceImpl implements AuthenticationService {
     }
 
     public User getUserByEmail(String email) {
+        log.info("Retrieving user with email {} from AuthService", email);
         return userRepository.findByEmail(email)
                             .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 
     public User getUserById(Long userId) {
+        log.info("Retrieving user with id {} from AuthService", userId);
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userId));
     }

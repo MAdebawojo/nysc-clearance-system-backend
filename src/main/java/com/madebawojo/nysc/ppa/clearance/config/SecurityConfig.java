@@ -36,10 +36,17 @@ public class SecurityConfig {
 //                                .requestMatchers("/api/v1/super-admin/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers(
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/v3/api-docs.yaml"
+                                ).permitAll()
                                 .anyRequest().authenticated() // Secure other requests
                 )
                 .csrf(csrf -> csrf
                                 .ignoringRequestMatchers("/api/**")
+                                .ignoringRequestMatchers("/swagger-ui/**", "/v3/api-docs/**")
 //                        .ignoringRequestMatchers("/api/v1/auth/**") // Disable CSRF for /auth routes as well
                                 .ignoringRequestMatchers(PathRequest.toH2Console()) // Disable CSRF for H2 console
 //                                .ignoringRequestMatchers("/api/v1/ppas/**")

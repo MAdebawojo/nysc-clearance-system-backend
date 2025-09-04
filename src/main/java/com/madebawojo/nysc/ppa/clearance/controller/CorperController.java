@@ -38,7 +38,7 @@ public class CorperController {
 
         return ResponseEntity
                 .created(location)
-                .body(ApiResponseStructure.success("Corper created successfully", response, HttpStatus.CREATED.value()));
+                .body(ApiResponseStructure.success("Corper created successfully. Email verification link has been sent to the registered account.", response, HttpStatus.CREATED.value()));
     }
 
     // Get Corper Profile (Authenticated Corper)

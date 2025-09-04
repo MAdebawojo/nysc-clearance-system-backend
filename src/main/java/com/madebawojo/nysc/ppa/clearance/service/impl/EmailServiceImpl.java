@@ -42,6 +42,20 @@ public class EmailServiceImpl implements EmailService {
         sendEmailAsync(user.getEmail(), "Reset Password Email Request", content);
     }
 
+    public void sendVerificationEmail(User user, String verificationLink) {
+        String htmlTemplate = loadTemplate("verify-email.html");
+
+        Map<String, String> placeholders = Map.of(
+                "{{name}}", user.getFirstName(),
+                "{{verification_link}}", verificationLink
+        );
+
+        String content = replacePlaceholders(htmlTemplate, placeholders);
+
+        log.info("Sending Email Verification to {}", user.getEmail());
+
+        sendEmailAsync(user.getEmail(), "Verification Email Request", content);
+    }
     /**
      * Sends an email asynchronously.
      *

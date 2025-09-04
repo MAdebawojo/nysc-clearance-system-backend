@@ -106,7 +106,7 @@ public class CorperServiceImpl implements CorperService {
                 .build();
         corperRepository.save(corper);
         log.info("Corper user profile has been created successfully");
-        emailVerificationServiceImpl.generateVerificationToken(user);
+        emailVerificationServiceImpl.generateAndSendVerificationToken(user);
         return CorperMapper.toDto(user, corper);
     }
 

@@ -1,14 +1,12 @@
 package com.madebawojo.nysc.ppa.clearance.entity.user;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
+import com.madebawojo.nysc.ppa.clearance.entity.PasswordResetToken;
 import com.madebawojo.nysc.ppa.clearance.entity.VerificationToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Admin;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Corper;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.SuperAdmin;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -60,6 +58,28 @@ public class User implements UserDetails {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VerificationToken> verificationTokens = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PasswordResetToken> passwordResetTokens = new ArrayList<>();
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -198,12 +198,14 @@ Done: Create HTML template for the Clearance docs
 Done: Research on refresh tokens
 Done: Implement Logout controller
 Done: Integrate Email  for new users
+Done: Forgot password controller for each account
+Done: Instead of setting-up a password, an email verification can be done instead such that the email contains a link and when the user clicks on the link, he's directed to put in a password for the account
+Done: Add Swagger Docs
 
 
 ToDo: Research on how to implement permissions so that admins can be given so admins can be role of a unit head or an hr
 ToDo: Research on how to use thymeleaf for the generation of docs or if I can use raw html and css
-ToDo: Add Swagger Docs
 ToDo: Implement an endpoint to view clearance docs for a specific corper that has been cleared
 ToDo: Research on how to enforce password reset on first login
-ToDo: Instead of setting-up a password, an email verification can be done instead such that the email contains a link and when the user clicks on the link, he's directed to put in a password for the account
-ToDo: Forgot password controller for each account
+ToDo: A super admin creating a unit doesn't have to pass in PPA id, the server should be able to extract this info from the token; implement this
+ToDo: A super admin should be able to get all units in PPA
