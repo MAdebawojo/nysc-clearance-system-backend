@@ -48,7 +48,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
         tokenRepository.save(token);
 
-        String resetLink = AppConstants.FRONTEND_BASE_URL + "auth/reset-password?token=" + rawToken;
+        String resetLink = AppConstants.FRONTEND_BASE_URL + "/auth/reset-password?token=" + rawToken;
 
         log.info("Password reset requested for user {}", user.getEmail());
 

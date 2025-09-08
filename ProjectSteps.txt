@@ -209,3 +209,4 @@ ToDo: Implement an endpoint to view clearance docs for a specific corper that ha
 ToDo: Research on how to enforce password reset on first login
 ToDo: A super admin creating a unit doesn't have to pass in PPA id, the server should be able to extract this info from the token; implement this
 ToDo: A super admin should be able to get all units in PPA
+ToDo: users should not be able to login until email verification is done

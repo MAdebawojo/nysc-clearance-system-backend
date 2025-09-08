@@ -2,6 +2,7 @@ package com.madebawojo.nysc.ppa.clearance.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -13,6 +14,6 @@ public class UnitRequestDto {
     private String name;
 
     @JsonProperty("ppa_id")
-    @NotBlank(message = "PPA id is required")
+    @NotNull(message = "PPA id is required")
     private Long ppaId;
 }

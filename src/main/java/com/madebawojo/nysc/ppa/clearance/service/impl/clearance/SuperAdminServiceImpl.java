@@ -1,5 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.service.impl.clearance;
 
+import com.madebawojo.nysc.ppa.clearance.core.exception.BusinessConflictException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.UserAlreadyExistsException;
 import com.madebawojo.nysc.ppa.clearance.dto.mapper.SuperAdminMapper;
 import com.madebawojo.nysc.ppa.clearance.dto.request.SuperAdminRequestDto;
@@ -12,10 +13,12 @@ import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundExceptio
 import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.SuperAdminRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
+import com.madebawojo.nysc.ppa.clearance.service.impl.auth.EmailVerificationServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.SuperAdminService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private final UserRepository userRepository;
     private final PpaRepository ppaRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailVerificationServiceImpl emailVerificationService;
 
     @Override
     public SuperAdminResponseDto createSuperAdmin(SuperAdminRequestDto request) {
@@ -57,9 +61,19 @@ public class SuperAdminServiceImpl implements SuperAdminService {
                 .ppa(ppaRepository.findById(request.getPpaId())
                         .orElseThrow(() -> new ResourceNotFoundException("PPA not found with ID: " + request.getPpaId())))
                 .build();
-        superAdminRepository.save(superAdmin);
+
+        try {
+            superAdminRepository.save(superAdmin);
+        } catch (DataIntegrityViolationException ex) {
+            throw new BusinessConflictException(
+                    String.format("Resource conflict: %s", ex.getMostSpecificCause().getMessage())
+            );
+        }
+
+//        superAdminRepository.save(superAdmin);
 
         log.info("SuperAdmin created successfully with ID: {}", superAdmin.getId());
+        emailVerificationService.generateAndSendVerificationToken(user);
 
         return SuperAdminMapper.toDto(user, superAdmin);
     }

@@ -130,6 +130,11 @@ public class GlobalExceptionHandler {
                 .body(ApiResponseStructure.error("Malformed or missing request body. Please check your JSON syntax.", HttpStatus.BAD_REQUEST.value()));
     }
 
-
+    @ExceptionHandler(BusinessConflictException.class)
+    public ResponseEntity<ApiResponseStructure<String>> handleBusinessConflict(BusinessConflictException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ApiResponseStructure.error(ex.getMessage(), HttpStatus.CONFLICT.value()));
+    }
 }
 

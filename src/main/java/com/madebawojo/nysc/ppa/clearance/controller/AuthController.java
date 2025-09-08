@@ -3,6 +3,7 @@ package com.madebawojo.nysc.ppa.clearance.controller;
 import com.madebawojo.nysc.ppa.clearance.dto.request.*;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.dto.response.AuthenticationResponseDto;
+import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.AuthServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.EmailVerificationServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.PasswordResetServiceImpl;
@@ -78,7 +79,7 @@ public class AuthController {
             summary = "Resend verification email",
             description = "Resends the email verification token to a user whose email has not yet been verified."
     )
-    public ResponseEntity<ApiResponseStructure<String>> resendVerification(@RequestBody ResendVerificationDto dto) {
+    public ResponseEntity<ApiResponseStructure<String>> resendVerification(@Valid @RequestBody ResendVerificationDto dto) {
         boolean sent = emailVerificationService.resendVerificationToken(dto.getEmail());
         if (sent) {
             return ResponseEntity.ok(ApiResponseStructure.success("Verification email resent", null, 200));
@@ -92,7 +93,7 @@ public class AuthController {
             summary = "Initiate password reset",
             description = "Sends a password reset link to the email of a user who has forgotten their password."
     )
-    public ResponseEntity<ApiResponseStructure<String>> forgotPassword(@RequestBody ForgotPasswordRequestDto requestDto) {
+    public ResponseEntity<ApiResponseStructure<String>> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDto requestDto) {
         passwordResetService.requestPasswordReset(requestDto.getEmail());
         return ResponseEntity.ok(ApiResponseStructure.success("If an account with that email exists, a reset link has been sent", null, 200));
     }
@@ -112,7 +113,7 @@ public class AuthController {
             summary = "Reset user password",
             description = "Resets the user's password after validating the reset token and accepting the new password."
     )
-    public ResponseEntity<ApiResponseStructure<String>> resetPassword(@RequestBody ResetPasswordRequestDto requestDto) {
+    public ResponseEntity<ApiResponseStructure<String>> resetPassword(@Valid @RequestBody ResetPasswordRequestDto requestDto) {
         passwordResetService.resetPassword(requestDto.getToken(), requestDto.getNewPassword());
         return ResponseEntity.ok(ApiResponseStructure.success("Password successfully reset", null, 200));
     }
@@ -133,8 +134,8 @@ public class AuthController {
             summary = "Log out all devices",
             description = "Logs the user out of all active sessions by invalidating all associated refresh tokens."
     )
-    public ResponseEntity<ApiResponseStructure<String>> logoutAll(@AuthenticationPrincipal(expression = "id") Long userId) {
-         refreshService.logoutAll(authService.getUserById(userId));
+    public ResponseEntity<ApiResponseStructure<String>> logoutAll(@AuthenticationPrincipal(expression = "id") User user) {
+         refreshService.logoutAll(authService.getUserById(user.getId()));
         return ResponseEntity.ok(ApiResponseStructure.success("Logged out of all devices", null, 200));
     }
 //}

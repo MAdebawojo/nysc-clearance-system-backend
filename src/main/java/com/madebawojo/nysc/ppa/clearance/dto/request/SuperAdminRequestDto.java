@@ -1,6 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class SuperAdminRequestDto {
     private String lastName;
 
     @JsonProperty("ppa_id")
+    @Column(unique = true)
     @NotNull(message = "PPA assignment is required")
     private Long ppaId;
 }

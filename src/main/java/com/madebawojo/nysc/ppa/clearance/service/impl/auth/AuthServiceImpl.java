@@ -31,6 +31,13 @@ public class AuthServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request, String ip, String ua) {
+        var user = getUserByEmail(request.getEmail());
+
+        if (!user.isEnabled()){
+            log.warn("Login attempt for disabled account: {}", user.getEmail());
+            throw new ApiException("Your account is not yet enabled. Please check your email for a verification link.", HttpStatus.FORBIDDEN);
+        }
+
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -41,8 +48,6 @@ public class AuthServiceImpl implements AuthenticationService {
         } catch (BadCredentialsException ex){
             throw new UnauthorizedException("Invalid email or password");
         }
-
-        var user = getUserByEmail(request.getEmail());
 
         TokenResponse tokenResponse = refreshService.issueAuthTokens(user, ip, ua);
 

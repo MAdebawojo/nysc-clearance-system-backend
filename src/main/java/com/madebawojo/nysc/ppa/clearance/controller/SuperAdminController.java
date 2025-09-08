@@ -4,6 +4,7 @@ import com.madebawojo.nysc.ppa.clearance.dto.request.SuperAdminRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateSuperAdminRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.dto.response.SuperAdminResponseDto;
+import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.service.impl.clearance.SuperAdminServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -56,8 +57,8 @@ public class SuperAdminController {
 
     // Get Authenticated Super Admin
     @GetMapping("/me")
-    public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> retrieveAuthenticatedSuperAdmin(@AuthenticationPrincipal(expression = "id") Long userId) {
-        SuperAdminResponseDto response = superAdminService.getSuperAdminProfileById(userId);
+    public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> retrieveAuthenticatedSuperAdmin(@AuthenticationPrincipal(expression = "id") User user) {
+        SuperAdminResponseDto response = superAdminService.getSuperAdminProfileById(user.getId());
         return ResponseEntity.ok(ApiResponseStructure.success("Corper retrieved successfully", response, HttpStatus.OK.value()));
     }
 
@@ -84,10 +85,10 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/me")
-    public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> updateAuthenticatedSuperAdmin(@AuthenticationPrincipal(expression = "id") Long id,
+    public ResponseEntity<ApiResponseStructure<SuperAdminResponseDto>> updateAuthenticatedSuperAdmin(@AuthenticationPrincipal(expression = "id") User user,
                                                                                         @Valid @RequestBody UpdateSuperAdminRequestDto request) {
-        log.info("Updating authenticated Super Admin with ID: {}", id);
-        SuperAdminResponseDto response = superAdminService.updateSuperAdminProfile(id, request);
+        log.info("Updating authenticated Super Admin with ID: {}", user.getId());
+        SuperAdminResponseDto response = superAdminService.updateSuperAdminProfile(user.getId(), request);
         return ResponseEntity.ok(
                 ApiResponseStructure.success("Super Admin updated successfully", response, HttpStatus.OK.value())
         );
