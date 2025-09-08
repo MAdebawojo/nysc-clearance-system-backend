@@ -1,0 +1,1 @@
+A Java-based system to automate the monthly clearance process for Nigerian NYSC corpers members within a single Place of Primary Assignment (PPA), streamline HR workflows, and enforce role-based access with security, auditability, and time-based control.
