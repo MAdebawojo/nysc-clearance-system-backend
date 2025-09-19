@@ -1,5 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.entity.auth;
 
+import com.madebawojo.nysc.ppa.clearance.core.enums.PasswordTokenType;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PasswordResetToken {
+public class PasswordToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,4 +33,8 @@ public class PasswordResetToken {
 
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PasswordTokenType type;
 }

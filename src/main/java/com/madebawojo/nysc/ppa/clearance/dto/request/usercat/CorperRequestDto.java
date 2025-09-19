@@ -14,9 +14,9 @@ public class CorperRequestDto {
     @NotBlank(message = "Corper email is required")
     private String email;
 
-    @NotBlank(message = "Corper password is required")
-    @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
-    private String password;
+//    @NotBlank(message = "Corper password is required")
+//    @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
+//    private String password;
 
     @JsonProperty("first_name")
     @NotBlank(message = "Corper first-name is required")

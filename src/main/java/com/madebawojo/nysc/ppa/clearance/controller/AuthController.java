@@ -1,5 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.controller;
 
+import com.madebawojo.nysc.ppa.clearance.core.enums.PasswordTokenType;
 import com.madebawojo.nysc.ppa.clearance.dto.request.auth.*;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.dto.response.AuthenticationResponseDto;
@@ -8,11 +9,13 @@ import com.madebawojo.nysc.ppa.clearance.service.impl.auth.AuthServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.EmailVerificationServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.PasswordResetServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.RefreshTokenServiceImpl;
+import com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth.PasswordSetupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +31,8 @@ public class AuthController {
     private final RefreshTokenServiceImpl refreshService;
     private final PasswordResetServiceImpl passwordResetService;
     private final EmailVerificationServiceImpl emailVerificationService;
+    private final PasswordSetupService passwordSetupService;
+
 
     @PostMapping("/login")
     @Operation(
@@ -64,15 +69,15 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponseStructure.success("Token refreshed", out, 200));
     }
 
-    @GetMapping("/verify-email")
-    @Operation(
-            summary = "Verify user email",
-            description = "Verifies a user's email address using a provided verification token."
-    )
-    public ResponseEntity<ApiResponseStructure<String>> verifyEmail(@RequestParam String token) {
-        emailVerificationService.verifyUserByToken(token);
-        return ResponseEntity.ok(ApiResponseStructure.success("Email verified successfully", null, 200));
-    }
+//    @GetMapping("/verify-email")
+//    @Operation(
+//            summary = "Verify user email",
+//            description = "Verifies a user's email address using a provided verification token."
+//    )
+//    public ResponseEntity<ApiResponseStructure<String>> verifyEmail(@RequestParam String token) {
+//        emailVerificationService.verifyUserByToken(token);
+//        return ResponseEntity.ok(ApiResponseStructure.success("Email verified successfully", null, 200));
+//    }
 
 //    @PostMapping("/set-password")
 //    @Operation(
@@ -86,19 +91,57 @@ public class AuthController {
 //        return ResponseEntity.ok(ApiResponseStructure.success("Password set successfully", null, 200));
 //    }
 
-    @PostMapping("/resend-verification")
+//    @PostMapping("/resend-verification")
+//    @Operation(
+//            summary = "Resend verification email",
+//            description = "Resends the email verification token to a user whose email has not yet been verified."
+//    )
+//    public ResponseEntity<ApiResponseStructure<String>> resendVerification(@Valid @RequestBody ResendVerificationDto dto) {
+//        boolean sent = emailVerificationService.resendVerificationToken(dto.getEmail());
+//        if (sent) {
+//            return ResponseEntity.ok(ApiResponseStructure.success("Verification email resent", null, 200));
+//        } else {
+//            return ResponseEntity.ok(ApiResponseStructure.success("User already verified", null, 200));
+//        }
+//    }
+
     @Operation(
-            summary = "Resend verification email",
-            description = "Resends the email verification token to a user whose email has not yet been verified."
+            summary = "Validate setup token",
+            description = "Checks if a setup token is valid and not expired before allowing the user to set a password."
     )
-    public ResponseEntity<ApiResponseStructure<String>> resendVerification(@Valid @RequestBody ResendVerificationDto dto) {
-        boolean sent = emailVerificationService.resendVerificationToken(dto.getEmail());
-        if (sent) {
-            return ResponseEntity.ok(ApiResponseStructure.success("Verification email resent", null, 200));
-        } else {
-            return ResponseEntity.ok(ApiResponseStructure.success("User already verified", null, 200));
-        }
+    @GetMapping("/validate-setup-token")
+    public ResponseEntity<ApiResponseStructure<Void>> validateSetupToken(@RequestParam String token) {
+        passwordSetupService.validateToken(token);
+        return ResponseEntity.ok(ApiResponseStructure.success("Token is valid", null, HttpStatus.OK.value()));
     }
+
+    @Operation(
+            summary = "Set up password for a new user",
+            description = "Allows a new user to set their password using a valid setup token. Automatically logs them in upon success."
+    )
+    @PostMapping("/setup-password")
+    public ResponseEntity<ApiResponseStructure<AuthenticationResponseDto>> setupPassword(
+            @Valid @RequestBody SetupPasswordRequestDto dto,
+            HttpServletRequest request) {
+
+        String ip = request.getRemoteAddr();
+        String ua = request.getHeader("User-Agent");
+
+        AuthenticationResponseDto response = passwordSetupService.setupPassword(dto, ip, ua);
+
+        return ResponseEntity.ok(ApiResponseStructure.success("Password setup successful", response, HttpStatus.OK.value()));
+    }
+
+    @PostMapping("/resend-setup")
+    @Operation(
+            summary = "Resend password setup email",
+            description = "Resends a password setup email to a user who hasn’t set their password yet."
+    )
+    public ResponseEntity<ApiResponseStructure<Void>> resendSetupEmail(@Valid @RequestBody ResendSetupDto dto) {
+        passwordSetupService.resendSetupLink(dto.getEmail());
+        return ResponseEntity.ok(ApiResponseStructure.success("Password setup email resent", null, HttpStatus.OK.value()));
+    }
+
 
     @PostMapping("/forgot-password")
     @Operation(
@@ -115,8 +158,8 @@ public class AuthController {
             summary = "Validate password reset token",
             description = "Validates the token sent to the user's email for password reset."
     )
-    public ResponseEntity<ApiResponseStructure<String>> validateToken(@RequestParam String token) {
-        passwordResetService.validateToken(token);
+    public ResponseEntity<ApiResponseStructure<String>> validateResetToken(@RequestParam String token) {
+        passwordResetService.validateToken(token, PasswordTokenType.RESET);
         return ResponseEntity.ok(ApiResponseStructure.success("Token is valid", null, 200));
     }
 

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.Year;
 import java.util.Map;
 
 @Slf4j
@@ -56,6 +57,23 @@ public class EmailServiceImpl implements EmailService {
 
         sendEmailAsync(user.getEmail(), "Verification Email Request", content);
     }
+
+    public void sendSetupPasswordEmail(User user, String setupLink){
+        String htmlTemplate = loadTemplate("setup-password.html");
+
+        Map<String, String> placeholders = Map.of(
+                "{{name}}", user.getFirstName(),
+                "{{setupLink}}", setupLink,
+                "{{year}}", String.valueOf(Year.now().getValue())
+        );
+
+        String content = replacePlaceholders(htmlTemplate, placeholders);
+
+        log.info("Sending password setup email to {}", user.getEmail());
+
+        sendEmailAsync(user.getEmail(), "Complete Your Registration – Set Your Password", content);
+    }
+
     /**
      * Sends an email asynchronously.
      *

@@ -33,3 +33,9 @@ global:
     firstName: Mosopefoluwa
     lastName: Adebawojo
     role: GLOBAL_ADMIN
+
+app:
+  security:
+    password:
+      setupTokenExpiry: 48
+      resetTokenExpiry: 1

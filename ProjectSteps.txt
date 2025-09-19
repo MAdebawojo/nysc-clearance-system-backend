@@ -211,6 +211,9 @@ ToDo: Dockerize & deploy (Dockerfile and Docker compose)
 ToDo: Configure MySQL
 ToDo: Generate README.md
 ToDo: Generate an SRS for this application (using flowcharts, and other relevant diagrams)
+ToDo: the application doesn't handle when units don't exist. it gives internal server error
+ToDo: handle error 500 when trying to create another admin in the same unit
+ToDo: delete admin not working
 
 ToDo: Research on how to implement permissions so that admins can be given so admins can be role of a unit head or an hr
 ToDo: Research on how to enforce password reset on first login

@@ -16,6 +16,7 @@ import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UnitRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.EmailVerificationServiceImpl;
+import com.madebawojo.nysc.ppa.clearance.service.impl.auth.PasswordSetupServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.usercat.CorperService;
 import com.madebawojo.nysc.ppa.clearance.util.AppConstants;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class CorperServiceImpl implements CorperService {
     private final UnitRepository unitRepository;
     private final PpaRepository ppaRepository;
     private final EmailVerificationServiceImpl emailVerificationServiceImpl;
+    private final PasswordSetupServiceImpl passwordSetupService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -92,7 +94,7 @@ public class CorperServiceImpl implements CorperService {
         // Create user first
         User user = User.builder()
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+//                .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .role(Role.CORPER)
@@ -112,7 +114,9 @@ public class CorperServiceImpl implements CorperService {
                 .build();
         corperRepository.save(corper);
         log.info("Corper user profile has been created successfully");
-        emailVerificationServiceImpl.generateAndSendVerificationToken(user);
+
+        passwordSetupService.requestPasswordSetup(user);
+//        emailVerificationServiceImpl.generateAndSendVerificationToken(user);
         return CorperMapper.toDto(user, corper);
     }
 

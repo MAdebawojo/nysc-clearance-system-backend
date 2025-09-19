@@ -16,6 +16,7 @@ import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UnitRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.EmailVerificationServiceImpl;
+import com.madebawojo.nysc.ppa.clearance.service.impl.auth.PasswordSetupServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.usercat.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ public class AdminServiceImpl implements AdminService {
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationServiceImpl emailVerificationServiceImpl;
     private final SuperAdminServiceImpl superAdminService;
+    private final PasswordSetupServiceImpl passwordSetupService;
 
 
     @Override
@@ -52,7 +54,7 @@ public class AdminServiceImpl implements AdminService {
 
         User user = User.builder()
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+//                .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .role(Role.ADMIN)
@@ -82,6 +84,9 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.save(admin);
 
         log.info("Admin profile created successfully for user: {}", user.getEmail());
+
+        passwordSetupService.requestPasswordSetup(user);
+
 //        emailVerificationServiceImpl.generateAndSendVerificationToken(user);
 
         return AdminMapper.toDto(user, admin);

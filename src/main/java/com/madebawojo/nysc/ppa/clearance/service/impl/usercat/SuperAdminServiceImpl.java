@@ -14,6 +14,7 @@ import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.SuperAdminRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.EmailVerificationServiceImpl;
+import com.madebawojo.nysc.ppa.clearance.service.impl.auth.PasswordSetupServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.usercat.SuperAdminService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private final PpaRepository ppaRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationServiceImpl emailVerificationService;
+    private final PasswordSetupServiceImpl passwordSetupService;
 
     @Override
     public SuperAdminResponseDto createSuperAdmin(SuperAdminRequestDto request) {
@@ -49,7 +51,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
         User user = User.builder()
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+//                .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .role(Role.SUPER_ADMIN)
@@ -74,6 +76,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
         log.info("SuperAdmin created successfully with ID: {}", superAdmin.getId());
 //        emailVerificationService.generateAndSendVerificationToken(user);
+        passwordSetupService.requestPasswordSetup(user);
 
         return SuperAdminMapper.toDto(user, superAdmin);
     }

@@ -16,9 +16,9 @@ public class AdminRequestDto {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @NotBlank(message = "Admin password is required")
-    @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
-    private String password;
+//    @NotBlank(message = "Admin password is required")
+//    @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
+//    private String password;
 
     @JsonProperty("first_name")
     @NotBlank(message = "Admin password first-name is required")

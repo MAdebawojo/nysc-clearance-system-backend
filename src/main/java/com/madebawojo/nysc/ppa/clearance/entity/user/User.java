@@ -1,7 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.entity.user;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
-import com.madebawojo.nysc.ppa.clearance.entity.auth.PasswordResetToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.PasswordToken;
 import com.madebawojo.nysc.ppa.clearance.entity.auth.VerificationToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Admin;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Corper;
@@ -34,8 +34,9 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @Builder.Default
+    @Column
+    private String password = null;
 
     @Column(nullable = false)
     private String firstName;
@@ -61,7 +62,7 @@ public class User implements UserDetails {
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PasswordResetToken> passwordResetTokens = new ArrayList<>();
+    private List<PasswordToken> passwordTokens = new ArrayList<>();
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -118,7 +119,7 @@ public class User implements UserDetails {
     }
 
     /**
-     * An Helper function used in UserService to validate that a user can only have one role at anytime during creation/update
+     * A Helper function used in UserService to validate that a user can only have one role at anytime during creation/update
     **/
     public boolean hasValidProfileForRole() {
         return switch (this.role) {
