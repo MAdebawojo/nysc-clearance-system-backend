@@ -12,6 +12,8 @@ target/
 *.iml
 *.ipr
 application.yml
+application-dev.yml
+application-prod.yml
 
 ### Eclipse ###
 .apt_generated
@@ -37,3 +39,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### App properties ###

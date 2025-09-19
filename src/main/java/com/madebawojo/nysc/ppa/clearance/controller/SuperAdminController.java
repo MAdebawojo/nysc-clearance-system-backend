@@ -8,6 +8,7 @@ import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.service.impl.usercat.SuperAdminServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequestMapping("/api/v1/super-admin")
 @RequiredArgsConstructor
 @Tag(name = "Super Admins", description = "Endpoints for managing Super Admin accounts. Some actions are restricted to Global Admins.")
+@SecurityRequirement(name = "bearerAuth")
 public class SuperAdminController {
 
     private final SuperAdminServiceImpl superAdminService;

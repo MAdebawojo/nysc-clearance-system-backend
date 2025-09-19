@@ -12,6 +12,7 @@ import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.Clear
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.List;
 @RequestMapping("/api/v1/clearances")
 @RequiredArgsConstructor
 @Tag(name = "Clearance Controllers", description = "Endpoints for clearance request management across Corpers, Unit Heads, and Super Admins")
+@SecurityRequirement(name = "bearerAuth")
 public class ClearanceController {
 
     private final ClearanceService clearanceService;

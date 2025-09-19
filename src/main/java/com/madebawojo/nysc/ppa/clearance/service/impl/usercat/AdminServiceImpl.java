@@ -1,6 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.service.impl.usercat;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
+import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.UserAlreadyExistsException;
 import com.madebawojo.nysc.ppa.clearance.dto.mapper.AdminMapper;
@@ -20,6 +21,7 @@ import com.madebawojo.nysc.ppa.clearance.service.impl.auth.PasswordSetupServiceI
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.usercat.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public AdminResponseDto createAdmin(Long superAdminId, AdminRequestDto request) {
         log.info("Attempting to create new admin with email: {}", request.getEmail());
+
+        if(adminRepository.existsByUnitId(request.getUnitId())){
+            log.warn("Assignment failed: Unit {} already has an admin assigned", request.getUnitId());
+            throw new ApiException("This unit already has an admin assigned", HttpStatus.BAD_REQUEST);
+        }
 
         if (userRepository.existsByEmail(request.getEmail())) {
             log.warn("Admin creation failed — Email already exists: {}", request.getEmail());
@@ -191,6 +198,7 @@ public class AdminServiceImpl implements AdminService {
                 });
 
         adminRepository.delete(admin);
+        adminRepository.flush();
         log.info("Admin with ID: {} has been deleted successfully", adminId);
     }
 }

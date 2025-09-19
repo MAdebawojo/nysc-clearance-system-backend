@@ -30,9 +30,9 @@ public class AdminRequestDto {
     @Size(min = 2, max = 30, message = "Last name must be between 2 and 30 characters long.")
     private String lastName;
 
-    @JsonProperty("ppa_id")
-    @NotNull(message = "PPA assignment is required")
-    private Long ppaId;
+//    @JsonProperty("ppa_id")
+//    @NotNull(message = "PPA assignment is required")
+//    private Long ppaId;
 
     @JsonProperty("unit_id")
     @NotNull(message = "Unit assignment is required")

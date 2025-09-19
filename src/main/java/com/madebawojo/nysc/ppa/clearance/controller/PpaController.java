@@ -7,6 +7,7 @@ import com.madebawojo.nysc.ppa.clearance.dto.response.ppa.PpaResponseDto;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.ppa.PpaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequestMapping("/api/v1/ppas")
 @RequiredArgsConstructor
 @Tag(name = "PPAs", description = "Manage Places of Primary Assignment (PPA). Restricted to Global Admins.")
+@SecurityRequirement(name = "bearerAuth")
 public class PpaController {
 
     private final PpaService ppaService;

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequestMapping("/api/v1/corpers")
 @RequiredArgsConstructor
 @Tag(name = "Corp Members", description = "Manage Corper accounts, profiles, and assignments.")
+@SecurityRequirement(name = "bearerAuth")
 public class CorperController {
 
     private final CorperServiceImpl corperService;

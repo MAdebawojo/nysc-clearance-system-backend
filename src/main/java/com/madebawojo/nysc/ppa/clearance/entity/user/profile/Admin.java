@@ -31,7 +31,7 @@ public class Admin {
 
     /* Entity relationships */
     @OneToOne
-    @JoinColumn(name = "unit_id", nullable = false)
+    @JoinColumn(name = "unit_id", nullable = false, unique = true)
     @ToString.Exclude
     private Unit unit;
 

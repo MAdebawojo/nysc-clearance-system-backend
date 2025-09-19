@@ -93,14 +93,14 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         tokenRepository.deleteByUserAndType(user, PasswordTokenType.RESET);
     }
 
-    @Override
-    public void cleanUpExpiredTokens() {
-
-    }
-
 //    @Override
 //    public void cleanUpExpiredTokens() {
-//        int deleted = tokenRepository.deleteAllExpiredSince(LocalDateTime.now());
-//        log.info("Cleaned up {} expired reset tokens", deleted);
+//
 //    }
+
+    @Override
+    public void cleanUpExpiredTokens() {
+        int deleted = tokenRepository.deleteAllExpiredSince(LocalDateTime.now());
+        log.info("Cleaned up {} expired reset tokens", deleted);
+    }
 }

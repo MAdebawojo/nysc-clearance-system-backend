@@ -204,6 +204,7 @@ Done: Add Swagger Docs
 Done: users should not be able to login until email verification is done
 Done: Research on how to use thymeleaf for the generation of docs or if I can use raw html and css
 Done: Implement an endpoint to view clearance docs for a specific corper that has been cleared
+Done: A super admin creating a unit doesn't have to pass in PPA id, the server should be able to extract this info from the token; implement this
 
 ToDo: When a user is created, they receive a magic link. On click, user becomes verified and they're directed to set a password. If they don't complete this process, on attempt to login, another magic link is crated.
 ToDo: Figure out how to create profiles without password but on verification or first login, they required to set a password. If I do this on verification, what if the customers aren't patient to set a new password. They'll mostly like want to do this when they actually want to use the application.
@@ -216,8 +217,6 @@ ToDo: handle error 500 when trying to create another admin in the same unit
 ToDo: delete admin not working
 
 ToDo: Research on how to implement permissions so that admins can be given so admins can be role of a unit head or an hr
-ToDo: Research on how to enforce password reset on first login
-ToDo: A super admin creating a unit doesn't have to pass in PPA id, the server should be able to extract this info from the token; implement this
 ToDo: A super admin should be able to get all units in PPA
 
 

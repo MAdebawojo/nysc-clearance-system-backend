@@ -4,6 +4,7 @@ import com.madebawojo.nysc.ppa.clearance.dto.request.auth.UpdateCredentialsReque
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.UserServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UserServiceImpl userService;
