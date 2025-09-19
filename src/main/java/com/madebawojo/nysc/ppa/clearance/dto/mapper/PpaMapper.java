@@ -1,7 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.dto.mapper;
 
-import com.madebawojo.nysc.ppa.clearance.dto.response.PpaResponseDto;
-import com.madebawojo.nysc.ppa.clearance.entity.Ppa;
+import com.madebawojo.nysc.ppa.clearance.dto.response.ppa.PpaResponseDto;
+import com.madebawojo.nysc.ppa.clearance.entity.ppa.Ppa;
 
 public class PpaMapper {
     public static PpaResponseDto toDto(Ppa ppa) {

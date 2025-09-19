@@ -201,12 +201,21 @@ Done: Integrate Email  for new users
 Done: Forgot password controller for each account
 Done: Instead of setting-up a password, an email verification can be done instead such that the email contains a link and when the user clicks on the link, he's directed to put in a password for the account
 Done: Add Swagger Docs
+Done: users should not be able to login until email verification is done
+Done: Research on how to use thymeleaf for the generation of docs or if I can use raw html and css
+Done: Implement an endpoint to view clearance docs for a specific corper that has been cleared
 
+ToDo: When a user is created, they receive a magic link. On click, user becomes verified and they're directed to set a password. If they don't complete this process, on attempt to login, another magic link is crated.
+ToDo: Figure out how to create profiles without password but on verification or first login, they required to set a password. If I do this on verification, what if the customers aren't patient to set a new password. They'll mostly like want to do this when they actually want to use the application.
+ToDo: Dockerize & deploy (Dockerfile and Docker compose)
+ToDo: Configure MySQL
+ToDo: Generate README.md
+ToDo: Generate an SRS for this application (using flowcharts, and other relevant diagrams)
 
 ToDo: Research on how to implement permissions so that admins can be given so admins can be role of a unit head or an hr
-ToDo: Research on how to use thymeleaf for the generation of docs or if I can use raw html and css
-ToDo: Implement an endpoint to view clearance docs for a specific corper that has been cleared
 ToDo: Research on how to enforce password reset on first login
 ToDo: A super admin creating a unit doesn't have to pass in PPA id, the server should be able to extract this info from the token; implement this
 ToDo: A super admin should be able to get all units in PPA
-ToDo: users should not be able to login until email verification is done
+
+
+ToDo: Could consider in-app notifications with websockets for real time info

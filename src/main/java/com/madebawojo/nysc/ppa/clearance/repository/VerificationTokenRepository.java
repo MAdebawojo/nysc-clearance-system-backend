@@ -1,6 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.repository;
 
-import com.madebawojo.nysc.ppa.clearance.entity.VerificationToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.VerificationToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

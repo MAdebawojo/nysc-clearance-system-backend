@@ -4,7 +4,7 @@ import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.UnauthorizedException;
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
-import com.madebawojo.nysc.ppa.clearance.dto.request.AuthenticationRequestDto;
+import com.madebawojo.nysc.ppa.clearance.dto.request.auth.AuthenticationRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.AuthenticationResponseDto;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth.AuthenticationService;
@@ -28,6 +28,7 @@ public class AuthServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenServiceImpl refreshService;
+//    private final EmailVerificationServiceImpl emailVerificationService;
 
     @Override
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request, String ip, String ua) {
@@ -35,6 +36,7 @@ public class AuthServiceImpl implements AuthenticationService {
 
         if (!user.isEnabled()){
             log.warn("Login attempt for disabled account: {}", user.getEmail());
+//            emailVerificationService.resendVerificationToken(user.getEmail());
             throw new ApiException("Your account is not yet enabled. Please check your email for a verification link.", HttpStatus.FORBIDDEN);
         }
 

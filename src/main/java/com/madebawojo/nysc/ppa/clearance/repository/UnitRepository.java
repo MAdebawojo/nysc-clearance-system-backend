@@ -1,7 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.repository;
 
-import com.madebawojo.nysc.ppa.clearance.entity.Ppa;
-import com.madebawojo.nysc.ppa.clearance.entity.Unit;
+import com.madebawojo.nysc.ppa.clearance.entity.ppa.Ppa;
+import com.madebawojo.nysc.ppa.clearance.entity.ppa.Unit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

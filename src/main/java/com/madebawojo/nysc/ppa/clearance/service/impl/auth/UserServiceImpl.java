@@ -4,7 +4,7 @@ import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.UnauthorizedException;
-import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequestDto;
+import com.madebawojo.nysc.ppa.clearance.dto.request.auth.UpdateCredentialsRequestDto;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth.UserService;
@@ -28,11 +28,10 @@ public class UserServiceImpl implements UserService {
     public String updateCredentials(String email, UpdateCredentialsRequestDto request) {
 
         User user = findUserByEmail(email);
-
         validateOldPassword(request.getOldPassword(), user.getPassword());
 
-       boolean passwordUpdated= updatePasswordIfPresent(user, request.getNewPassword(), email);
-       boolean emailUpdated =  updateEmailIfPresent(user, request.getNewEmail(), email);
+        boolean passwordUpdated= updatePasswordIfPresent(user, request.getNewPassword(), email);
+        boolean emailUpdated =  updateEmailIfPresent(user, request.getNewEmail(), email);
 
         userRepository.save(user);
         log.info("Credentials updated for user with email: {}", email);
@@ -113,7 +112,7 @@ public class UserServiceImpl implements UserService {
 //import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 //import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
 //import com.madebawojo.nysc.ppa.clearance.core.exception.UnauthorizedException;
-//import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequestDto;
+//import com.madebawojo.nysc.ppa.clearance.dto.request.auth.UpdateCredentialsRequestDto;
 //import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 //import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
 //import com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth.UserService;

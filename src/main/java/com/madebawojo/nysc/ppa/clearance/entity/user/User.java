@@ -1,8 +1,8 @@
 package com.madebawojo.nysc.ppa.clearance.entity.user;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
-import com.madebawojo.nysc.ppa.clearance.entity.PasswordResetToken;
-import com.madebawojo.nysc.ppa.clearance.entity.VerificationToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.PasswordResetToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.VerificationToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Admin;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Corper;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.SuperAdmin;
@@ -113,6 +113,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+//        return true;
         return this.isVerified && !this.isBlocked;
     }
 
@@ -126,6 +127,10 @@ public class User implements UserDetails {
             case SUPER_ADMIN -> this.superAdmin != null && this.corper == null && this.admin == null;
             default -> false;
         };
+    }
+
+    public String getFullName(){
+        return this.firstName + " " + this.lastName;
     }
 
     /* Relationships to profiles */

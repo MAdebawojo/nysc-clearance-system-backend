@@ -1,6 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.controller;
 
-import com.madebawojo.nysc.ppa.clearance.dto.request.*;
+import com.madebawojo.nysc.ppa.clearance.dto.request.auth.*;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.dto.response.AuthenticationResponseDto;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
@@ -73,6 +73,18 @@ public class AuthController {
         emailVerificationService.verifyUserByToken(token);
         return ResponseEntity.ok(ApiResponseStructure.success("Email verified successfully", null, 200));
     }
+
+//    @PostMapping("/set-password")
+//    @Operation(
+//            summary = "Set password after account verification",
+//            description = "Allows users without a password to set one after verifying their email."
+//    )
+//    public ResponseEntity<ApiResponseStructure<String>> setPassword(
+//            @Valid @RequestBody SetPasswordRequestDto request
+//    ) {
+//        authService.setPassword(request.getToken(), request.getNewPassword());
+//        return ResponseEntity.ok(ApiResponseStructure.success("Password set successfully", null, 200));
+//    }
 
     @PostMapping("/resend-verification")
     @Operation(

@@ -1,6 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.service.impl.auth;
 
-import com.madebawojo.nysc.ppa.clearance.entity.RefreshToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.RefreshToken;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;

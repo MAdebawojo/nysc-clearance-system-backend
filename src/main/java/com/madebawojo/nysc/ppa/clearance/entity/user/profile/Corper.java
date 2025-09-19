@@ -1,11 +1,15 @@
 package com.madebawojo.nysc.ppa.clearance.entity.user.profile;
 
-import com.madebawojo.nysc.ppa.clearance.entity.Ppa;
-import com.madebawojo.nysc.ppa.clearance.entity.Unit;
+import com.madebawojo.nysc.ppa.clearance.entity.clearance.ClearanceRequest;
+import com.madebawojo.nysc.ppa.clearance.entity.ppa.Ppa;
+import com.madebawojo.nysc.ppa.clearance.entity.ppa.Unit;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import jakarta.persistence.*;
 
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -47,5 +51,9 @@ public class Corper {
     @JoinColumn(name = "ppa_id", nullable = false)
     @ToString.Exclude
     private Ppa ppa;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "corper", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClearanceRequest> clearanceRequests = new ArrayList<>();
 
 }

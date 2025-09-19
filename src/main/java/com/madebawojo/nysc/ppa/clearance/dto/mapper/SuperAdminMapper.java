@@ -1,6 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.dto.mapper;
 
-import com.madebawojo.nysc.ppa.clearance.dto.response.SuperAdminResponseDto;
+import com.madebawojo.nysc.ppa.clearance.dto.response.usercat.SuperAdminResponseDto;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.SuperAdmin;
 

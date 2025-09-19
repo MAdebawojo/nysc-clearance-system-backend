@@ -1,9 +1,9 @@
 package com.madebawojo.nysc.ppa.clearance.dto.mapper;
 
-import com.madebawojo.nysc.ppa.clearance.dto.request.UnitRequestDto;
-import com.madebawojo.nysc.ppa.clearance.dto.response.UnitResponseDto;
-import com.madebawojo.nysc.ppa.clearance.entity.Unit;
-import com.madebawojo.nysc.ppa.clearance.entity.Ppa;
+import com.madebawojo.nysc.ppa.clearance.dto.request.ppa.UnitRequestDto;
+import com.madebawojo.nysc.ppa.clearance.dto.response.ppa.UnitResponseDto;
+import com.madebawojo.nysc.ppa.clearance.entity.ppa.Unit;
+import com.madebawojo.nysc.ppa.clearance.entity.ppa.Ppa;
 
 public class UnitMapper {
 

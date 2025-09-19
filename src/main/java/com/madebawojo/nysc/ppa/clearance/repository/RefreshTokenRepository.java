@@ -1,6 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.repository;
 
-import com.madebawojo.nysc.ppa.clearance.entity.RefreshToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

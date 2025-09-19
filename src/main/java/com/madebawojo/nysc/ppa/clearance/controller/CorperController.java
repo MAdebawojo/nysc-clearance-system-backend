@@ -1,9 +1,14 @@
 package com.madebawojo.nysc.ppa.clearance.controller;
 
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
-import com.madebawojo.nysc.ppa.clearance.dto.request.CorperRequestDto;
-import com.madebawojo.nysc.ppa.clearance.dto.response.CorperResponseDto;
-import com.madebawojo.nysc.ppa.clearance.service.impl.clearance.CorperServiceImpl;
+import com.madebawojo.nysc.ppa.clearance.dto.request.usercat.CorperRequestDto;
+import com.madebawojo.nysc.ppa.clearance.dto.response.usercat.CorperResponseDto;
+import com.madebawojo.nysc.ppa.clearance.service.impl.usercat.CorperServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +26,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/corpers")
 @RequiredArgsConstructor
+@Tag(name = "Corp Members", description = "Manage Corper accounts, profiles, and assignments.")
 public class CorperController {
 
     private final CorperServiceImpl corperService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @Operation(
+            summary = "Create a new Corper",
+            description = "Registers a new Corper. Only ADMIN and SUPER_ADMIN roles can perform this.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Corper created successfully",
+                            content = @Content(schema = @Schema(implementation = CorperResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions")
+            }
+    )
     public ResponseEntity<ApiResponseStructure<CorperResponseDto>> createCorper(@Valid @RequestBody CorperRequestDto dto) {
         CorperResponseDto response = corperService.createCorper(dto);
 
@@ -43,13 +59,15 @@ public class CorperController {
 
     // Get Corper Profile (Authenticated Corper)
     @GetMapping("/me")
+    @Operation(summary = "Get authenticated Corper profile")
     public ResponseEntity<ApiResponseStructure<CorperResponseDto>> retrieveAuthenticatedCorper(@AuthenticationPrincipal(expression = "id") Long userId) {
         CorperResponseDto response = corperService.getCorperById(userId);
         return ResponseEntity.ok(ApiResponseStructure.success("Corper retrieved successfully", response, HttpStatus.OK.value()));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @Operation(summary = "Retrieve Corper by ID (Admin access)")
     public ResponseEntity<ApiResponseStructure<CorperResponseDto>> retrieveCorperWithIdByAdmin(Long userId) {
         CorperResponseDto response = corperService.getCorperById(userId);
         return ResponseEntity.ok(ApiResponseStructure.success("Corper retrieved successfully", response, HttpStatus.OK.value()));
@@ -57,14 +75,16 @@ public class CorperController {
 
     // Update Corper Profile
     @PutMapping("/me")
+    @Operation(summary = "Update authenticated Corper profile")
     public ResponseEntity<ApiResponseStructure<CorperResponseDto>> updateCorper(@AuthenticationPrincipal(expression = "id") Long userId,
                                                                                 @Valid @RequestBody CorperRequestDto dto) {
         CorperResponseDto response = corperService.updateCorper(userId, dto);
         return ResponseEntity.ok(ApiResponseStructure.success("Corper updated successfully", response, HttpStatus.OK.value()));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @Operation(summary = "Update Corper by ID (Admin access)")
     public ResponseEntity<ApiResponseStructure<CorperResponseDto>> updateCorperWithIdByAdmin(Long userId, @Valid @RequestBody CorperRequestDto dto) {
         CorperResponseDto response = corperService.updateCorper(userId, dto);
         return ResponseEntity.ok(ApiResponseStructure.success("Corper updated successfully", response, HttpStatus.OK.value()));
@@ -78,36 +98,41 @@ public class CorperController {
 //        return ResponseEntity.ok(ApiResponseStructure.success("Credentials updated successfully", null, HttpStatus.NO_CONTENT.value()));
 //    }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     @GetMapping("/unit/{unitId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @Operation(summary = "Get all Corpers in a Unit (Admin access)")
     public ResponseEntity<ApiResponseStructure<List<CorperResponseDto>>> getCorpersInUnit(@PathVariable Long unitId) {
         List<CorperResponseDto> corpers = corperService.getAllCorpersInUnit(unitId);
         return ResponseEntity.ok(ApiResponseStructure.success("Corpers in unit retrieved successfully", corpers, HttpStatus.OK.value()));
     }
 
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/ppa/{ppaId}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @Operation(summary = "Get all Corpers in a PPA (Super Admin only)")
     public ResponseEntity<ApiResponseStructure<List<CorperResponseDto>>> getCorpersInPpa(@PathVariable Long ppaId) {
         List<CorperResponseDto> corpers = corperService.getAllCorpersInPpa(ppaId);
         return ResponseEntity.ok(ApiResponseStructure.success("Corpers in PPA retrieved successfully", corpers, HttpStatus.OK.value()));
     }
 
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}/block")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @Operation(summary = "Block a Corper (Super Admin only)")
     public ResponseEntity<ApiResponseStructure<String>> blockCorper(@PathVariable Long id) {
         corperService.blockCorper(id);
         return ResponseEntity.ok(ApiResponseStructure.success("Corper blocked successfully", null, HttpStatus.NO_CONTENT.value()));
     }
 
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}/unblock")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @Operation(summary = "Unblock a Corper (Super Admin only)")
     public ResponseEntity<ApiResponseStructure<String>> unblockCorper(@PathVariable Long id) {
         corperService.unblockCorper(id);
         return ResponseEntity.ok(ApiResponseStructure.success("Corper unblocked successfully", null, HttpStatus.NO_CONTENT.value()));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @Operation(summary = "Delete a Corper (Admin or Super Admin only)")
     public ResponseEntity<ApiResponseStructure<Void>> deleteCorperByAdmin(@PathVariable Long id) {
         corperService.deleteCorper(id);
         return ResponseEntity.ok(
@@ -123,11 +148,11 @@ public class CorperController {
 //package com.madebawojo.nysc.ppa.clearance.controller;
 //
 //import com.madebawojo.nysc.ppa.clearance.core.response.ApiResponseStructure;
-//import com.madebawojo.nysc.ppa.clearance.dto.request.CorperRequestDto;
+//import com.madebawojo.nysc.ppa.clearance.dto.request.usercat.CorperRequestDto;
 //import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequest;
-//import com.madebawojo.nysc.ppa.clearance.dto.response.CorperResponseDto;
-//import com.madebawojo.nysc.ppa.clearance.service.impl.clearance.CorperServiceImpl;
-//import com.madebawojo.nysc.ppa.clearance.service.servicecontract.clearance.CorperService;
+//import com.madebawojo.nysc.ppa.clearance.dto.response.usercat.CorperResponseDto;
+//import com.madebawojo.nysc.ppa.clearance.service.impl.usercat.CorperServiceImpl;
+//import com.madebawojo.nysc.ppa.clearance.service.servicecontract.usercat.CorperService;
 //import jakarta.validation.Valid;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.http.HttpStatus;

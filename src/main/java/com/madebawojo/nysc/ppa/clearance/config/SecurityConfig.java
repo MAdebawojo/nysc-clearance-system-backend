@@ -2,7 +2,6 @@ package com.madebawojo.nysc.ppa.clearance.config;
 
 import com.madebawojo.nysc.ppa.clearance.security.CustomAccessDeniedHandler;
 import com.madebawojo.nysc.ppa.clearance.security.CustomAuthenticationEntryPoint;
-import com.madebawojo.nysc.ppa.clearance.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +35,9 @@ public class SecurityConfig {
 //                                .requestMatchers("/api/v1/super-admin/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/resources/**").permitAll()
+//                                .requestMatchers("/api/v1/clearance-docs/**").permitAll()
+
                                 .requestMatchers(
                                         "/swagger-ui.html",
                                         "/swagger-ui/**",

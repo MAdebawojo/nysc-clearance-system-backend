@@ -2,7 +2,7 @@ package com.madebawojo.nysc.ppa.clearance.service.impl.auth;
 
 import com.madebawojo.nysc.ppa.clearance.core.exception.UnauthorizedException;
 import com.madebawojo.nysc.ppa.clearance.dto.response.AuthenticationResponseDto;
-import com.madebawojo.nysc.ppa.clearance.entity.RefreshToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.RefreshToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.repository.RefreshTokenRepository;
 import com.madebawojo.nysc.ppa.clearance.util.JwtUtil;

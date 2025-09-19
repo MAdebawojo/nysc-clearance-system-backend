@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Letterhead Example</title>
     <style>
         /* General body and page styles */
@@ -145,7 +145,7 @@
 <body>
 <!-- Header with logo and company info -->
 <div class="header">
-    <img class="logo" src="company_logo.png" alt="Company Logo">
+<!--    <img class="logo" src="company_logo.png" alt="Company Logo">-->
     <div class="company-info">
         <p><strong>eTranzact International Plc</strong></p>
         <p>RC: 460713</p>
@@ -155,13 +155,13 @@
 
 <!-- Date and recipient information -->
 <div class="date-address">
-    <p class="date">31st July 2025</p>
+    <p class="date" th:text="${clearanceLetterDate}"></p>
     <p class="recipient">
-        The State Coordinator,<br>
-        NYSC Secretariat,<br>
-        Babs Animashaun Road,<br>
-        (Old Census Office), Surulere,<br>
-        P.M.B. 1053, Sabo-Yaba.<br>
+        The State Coordinator,<br />
+        NYSC Secretariat,<br />
+        Babs Animashaun Road,<br />
+        (Old Census Office), Surulere,<br />
+        P.M.B. 1053, Sabo-Yaba.<br />
         Lagos State.
     </p>
 </div>
@@ -169,23 +169,29 @@
 <!-- Body content of the letter -->
 <div class="content">
     <p>Dear Sir,</p>
-    <p class="document-title"><strong>CLEARANCE LETTER FOR THE MONTH OF AUGUST 2025</strong></p>
-    <p>This is to certify that <strong>Adebawojo Mosopefoluwa Oluwasegunfunmi</strong> with State code: <strong>LA/24C/10929</strong> posted to eTranzact International has been diligent in discharging his duty in the Organization and should be paid his allowance for the month of August.</p>
+    <p class="document-title">
+        <strong>CLEARANCE LETTER FOR THE MONTH OF <span th:text="${clearanceMonthUpper}"></span> 2025</strong>
+    </p>
+    <p>This is to certify that <strong th:text="${corpsMemberName}"></strong> with State code: <strong th:text="${stateCode}"></strong> posted to eTranzact International has been diligent in discharging his duty in the Organization and should be paid his allowance for the month of August.</p>
     <div class="corper-details">
-        <p>Name: <strong>Adebawojo Mosopefoluwa Oluwasegunfunmi</strong></p>
-        <p>State Code: <strong>LA/24C/10929</strong></p>
-        <p>Call-up No: <strong>NYSC/BCU/2024/361847</strong></p>
+        <p>Name: <strong th:text="${corpsMemberName}"></strong></p>
+        <p>State Code: <strong th:text="${stateCode}"></strong></p>
+        <p>Call-up No: <strong th:text="${callUpNumber}"></strong></p>
     </div>
 
     <div class="document-salutation">
         <p>Regards,</p>
         <!-- Signature and Stamp Section -->
-        <div class="signature-stamp">
-            <img class="signature" src="signature_image.png" alt="Signature">
-            <img class="stamp" src="stamp_image.png" alt="Stamp">
-        </div>
-        <p>Abidun Ojo</p>
-        <p>Head Human Resource</p>
+<!--        <div class="signature-stamp">-->
+<!--            <img class="signature" src="signature_image.png" alt="Signature">-->
+<!--            <img class="stamp" src="stamp_image.png" alt="Stamp">-->
+<!--        </div>-->
+        <br />
+        <br />
+        <br />
+
+        <p th:text="${signatoryName}"></p>
+        <p th:text="${signatoryTitle}"></p>
     </div>
 
 </div>

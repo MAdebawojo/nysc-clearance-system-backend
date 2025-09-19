@@ -2,7 +2,7 @@ package com.madebawojo.nysc.ppa.clearance.service.impl.auth;
 
 import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
-import com.madebawojo.nysc.ppa.clearance.entity.VerificationToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.VerificationToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.VerificationTokenRepository;
@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 import com.madebawojo.nysc.ppa.clearance.util.AppConstants;
 
@@ -76,11 +75,14 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
 
     @Override
     public boolean resendVerificationToken(String email) {
+      log.info("Resending email verification for {}", email);
+
       User user =  authService.getUserByEmail(email);
       if(user.isVerified()){
           log.info("User {} already verified", user.getEmail());
           return false;
       }
+
       generateAndSendVerificationToken(user);
       return true;
     }

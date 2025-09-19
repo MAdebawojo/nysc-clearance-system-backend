@@ -1,6 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.entity.user.profile;
 
-import com.madebawojo.nysc.ppa.clearance.entity.Ppa;
+import com.madebawojo.nysc.ppa.clearance.entity.ppa.Ppa;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import jakarta.persistence.*;
 

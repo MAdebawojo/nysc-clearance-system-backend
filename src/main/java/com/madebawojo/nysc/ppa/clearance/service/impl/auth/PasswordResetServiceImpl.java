@@ -2,7 +2,7 @@ package com.madebawojo.nysc.ppa.clearance.service.impl.auth;
 
 import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
-import com.madebawojo.nysc.ppa.clearance.entity.PasswordResetToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.PasswordResetToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.repository.PasswordResetTokenRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UserRepository;

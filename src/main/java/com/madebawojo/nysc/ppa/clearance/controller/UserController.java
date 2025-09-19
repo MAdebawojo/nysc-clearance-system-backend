@@ -1,6 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.controller;
 
-import com.madebawojo.nysc.ppa.clearance.dto.request.UpdateCredentialsRequestDto;
+import com.madebawojo.nysc.ppa.clearance.dto.request.auth.UpdateCredentialsRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ApiResponseStructure;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.service.impl.auth.UserServiceImpl;

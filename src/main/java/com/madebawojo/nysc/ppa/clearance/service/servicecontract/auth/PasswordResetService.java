@@ -1,6 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.service.servicecontract.auth;
 
-import com.madebawojo.nysc.ppa.clearance.entity.PasswordResetToken;
+import com.madebawojo.nysc.ppa.clearance.entity.auth.PasswordResetToken;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import org.springframework.scheduling.annotation.Scheduled;
 
