@@ -34,9 +34,9 @@ public class CorperRequestDto {
     @NotBlank(message = "Corper call-up number is required")
     private String callUpNumber;
 
-    @JsonProperty("ppa_id")
-    @NotNull(message = "PPA assignment is required")
-    private Long ppaId;
+//    @JsonProperty("ppa_id")
+//    @NotNull(message = "PPA assignment is required")
+//    private Long ppaId;
 
     @JsonProperty("unit_id")
     @NotNull(message = "Unit assignment is required")

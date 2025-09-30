@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
 @Builder
 public class TokenResponse {
@@ -13,4 +15,6 @@ public class TokenResponse {
     private String refreshToken;
     @JsonProperty("token_type")
     private String tokenType = "Bearer";
+    @JsonProperty("access_token_expiry")
+    private long accessTokenExpiry;
 }

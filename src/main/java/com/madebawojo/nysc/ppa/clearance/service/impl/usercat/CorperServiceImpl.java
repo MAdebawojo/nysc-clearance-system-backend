@@ -11,6 +11,7 @@ import com.madebawojo.nysc.ppa.clearance.dto.request.auth.UpdateCredentialsReque
 import com.madebawojo.nysc.ppa.clearance.dto.response.usercat.CorperResponseDto;
 import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Corper;
+import com.madebawojo.nysc.ppa.clearance.entity.user.profile.SuperAdmin;
 import com.madebawojo.nysc.ppa.clearance.repository.CorperRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UnitRepository;
@@ -41,6 +42,8 @@ public class CorperServiceImpl implements CorperService {
     private final PpaRepository ppaRepository;
     private final EmailVerificationServiceImpl emailVerificationServiceImpl;
     private final PasswordSetupServiceImpl passwordSetupService;
+    private final SuperAdminServiceImpl superAdminService;
+
 
     private final PasswordEncoder passwordEncoder;
 
@@ -68,15 +71,17 @@ public class CorperServiceImpl implements CorperService {
     }
 
     @Override
-    public List<CorperResponseDto> getAllCorpersInPpa(Long ppaId) {
-        return corperRepository.findAllByPpaId(ppaId).stream()
+    public List<CorperResponseDto> getAllCorpersInPpa(Long superAdminId) {
+        SuperAdmin superAdmin = superAdminService.getSuperAdminEntityById(superAdminId);
+
+        return corperRepository.findAllByPpaId(superAdmin.getPpa().getId()).stream()
                 .map(corper -> CorperMapper.toDto(corper.getUser(), corper))
                 .collect(Collectors.toList());
     }
 
 
     @Override
-    public CorperResponseDto createCorper(CorperRequestDto request) {
+    public CorperResponseDto createCorper(Long superAdminId, CorperRequestDto request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             log.warn("Corper creation failed — email already in use: {}", request.getEmail());
             throw new UserAlreadyExistsException("Email is already in use");
@@ -89,6 +94,8 @@ public class CorperServiceImpl implements CorperService {
         if (corperRepository.existsByStateCode(request.getStateCode())) {
             throw new ApiException("A corper with this state-corper already exists", HttpStatus.BAD_REQUEST);
         }
+
+        SuperAdmin superAdmin = superAdminService.getSuperAdminEntityById(superAdminId);
 
 
         // Create user first
@@ -109,7 +116,7 @@ public class CorperServiceImpl implements CorperService {
                 .stateCode(request.getStateCode())
                 .callUpNumber(request.getCallUpNumber())
                 .unit(unitRepository.findById(request.getUnitId()).orElseThrow())
-                .ppa(ppaRepository.findById(request.getPpaId()).orElseThrow())
+                .ppa(superAdmin.getPpa())
                 .isActive(true)
                 .build();
         corperRepository.save(corper);

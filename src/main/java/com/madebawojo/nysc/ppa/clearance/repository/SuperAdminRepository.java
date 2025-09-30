@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface SuperAdminRepository extends JpaRepository<SuperAdmin, Long> {
     Optional<SuperAdmin> findByUserId(Long userId);
+    boolean existsByPpaId(Long ppaId);
 }

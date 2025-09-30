@@ -205,15 +205,20 @@ Done: users should not be able to login until email verification is done
 Done: Research on how to use thymeleaf for the generation of docs or if I can use raw html and css
 Done: Implement an endpoint to view clearance docs for a specific corper that has been cleared
 Done: A super admin creating a unit doesn't have to pass in PPA id, the server should be able to extract this info from the token; implement this
+Done: When a user is created, they receive a setup password link. On click, user becomes verified and they're directed to set a password. If they don't complete this process, they always go back to their email or if the token expires, request for a new one.
+Done: include epoch expiresAt in token response
 
-ToDo: When a user is created, they receive a magic link. On click, user becomes verified and they're directed to set a password. If they don't complete this process, on attempt to login, another magic link is crated.
-ToDo: Figure out how to create profiles without password but on verification or first login, they required to set a password. If I do this on verification, what if the customers aren't patient to set a new password. They'll mostly like want to do this when they actually want to use the application.
+
+
 ToDo: Dockerize & deploy (Dockerfile and Docker compose)
 ToDo: Configure MySQL
 ToDo: Generate README.md
 ToDo: Generate an SRS for this application (using flowcharts, and other relevant diagrams)
 ToDo: the application doesn't handle when units don't exist. it gives internal server error
+
+
 ToDo: handle error 500 when trying to create another admin in the same unit
+ToDo: include error code for client navigation if setup token is expired
 ToDo: delete admin not working
 
 ToDo: Research on how to implement permissions so that admins can be given so admins can be role of a unit head or an hr
@@ -221,3 +226,7 @@ ToDo: A super admin should be able to get all units in PPA
 
 
 ToDo: Could consider in-app notifications with websockets for real time info
+
+
+2025-09-22T18:11:00.588+01:00  WARN 416795 --- [nio-8080-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.NullPointerException: Cannot invoke "String.getBytes(java.nio.charset.Charset)" because "raw" is null]
+2025-09-22T18:11:12.664+01:00  WARN 416795 --- [io-8080-exec-10] c.m.n.p.c.c.e.GlobalExceptionHandler     : Internal Server error: Cannot invoke "String.getBytes(java.nio.charset.Charset)" because "raw" is null

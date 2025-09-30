@@ -8,7 +8,7 @@ import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Corper;
 import java.util.List;
 
 public interface CorperService {
-    CorperResponseDto createCorper(CorperRequestDto dto);
+    CorperResponseDto createCorper(Long superAdminId, CorperRequestDto dto);
     CorperResponseDto getCorperById(Long userId);
     Corper getCorperEntityById(Long corperId);
     List<CorperResponseDto> getAllCorpersInUnit(Long unitId);

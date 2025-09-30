@@ -11,9 +11,9 @@ import java.time.Duration;
 @ConfigurationProperties(prefix = "app.security.password")
 @Getter
 @Setter
-public class PasswordTokenProperties {
-
+public class TokenProperties {
     private Duration setupTokenExpiry = Duration.ofHours(24); // fallback default
     private Duration resetTokenExpiry = Duration.ofHours(1);  // fallback default
+    private Duration accessTokenExpiry = Duration.ofMinutes(30); // 30 minutes by default
 }
 

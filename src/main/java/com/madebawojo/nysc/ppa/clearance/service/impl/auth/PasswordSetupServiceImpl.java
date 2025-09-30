@@ -51,7 +51,7 @@ public class PasswordSetupServiceImpl implements PasswordSetupService {
 
         tokenRepository.save(token);
 
-        String setupLink = AppConstants.FRONTEND_BASE_URL + "/auth/setup-password?token=" + rawToken;
+        String setupLink = AppConstants.FRONTEND_BASE_URL + "/setup-password?token=" + rawToken;
 
         log.info("Password setup link created for new user {}", user.getEmail());
 
@@ -111,8 +111,13 @@ public class PasswordSetupServiceImpl implements PasswordSetupService {
 
     @Override
     public void resendSetupLink(String email) {
+        log.debug("Attempting to resend setup link for email: {}", email);
+
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> {
+                    log.warn("Resend setup link failed - user not found for email: {}", email);
+                    return new ResourceNotFoundException("User not found with email: " + email);
+                });
 
         if (user.getPassword() != null) {
             throw new ApiException("Password already set. Please login or reset password.", HttpStatus.BAD_REQUEST);
@@ -132,7 +137,9 @@ public class PasswordSetupServiceImpl implements PasswordSetupService {
 
         tokenRepository.save(token);
 
-        String setupLink = AppConstants.FRONTEND_BASE_URL + "/auth/setup-password?token=" + rawToken;
+        log.debug("Created new password setup token for user {} with expiry at {}", user.getEmail(), token.getExpiresAt());
+
+        String setupLink = AppConstants.FRONTEND_BASE_URL + "/setup-password?token=" + rawToken;
 
         emailService.sendSetupPasswordEmail(user, setupLink);
 

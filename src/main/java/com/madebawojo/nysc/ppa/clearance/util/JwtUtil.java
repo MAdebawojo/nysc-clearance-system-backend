@@ -1,9 +1,11 @@
 package com.madebawojo.nysc.ppa.clearance.util;
 
+import com.madebawojo.nysc.ppa.clearance.config.properties.TokenProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtUtil {
     private static final String SECRET_KEY = AppConstants.SECRET_KEY;
+    private final TokenProperties tokenProperties;
 
 //    public String generateToken(
 //            UserDetails userDetails
@@ -33,12 +37,14 @@ public class JwtUtil {
       Map<String, Object> extraClaims,
       UserDetails userDetails
     ){
+        long expirationTimeMillis = tokenProperties.getAccessTokenExpiry().toMillis();
+
         return Jwts
                 .builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .expiration(new Date(System.currentTimeMillis() + expirationTimeMillis))
                 .signWith(getSignInkey())
                 .compact();
     }
@@ -78,6 +84,16 @@ public class JwtUtil {
         final String username = extractUsername(token);
 
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    /**
+     * Returns the expiration time as a Unix timestamp (seconds).
+     * @param token The JWT token.
+     * @return Expiration time as Unix timestamp.
+     */
+    public long getExpirationTimeInSeconds(String token) {
+        Date expirationDate = extractExpiration(token);
+        return expirationDate.getTime() / 1000;  // Convert milliseconds to seconds
     }
 
 }

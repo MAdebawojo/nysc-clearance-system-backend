@@ -174,6 +174,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
+//    @PreAuthorize("isAuthenticated()")
     @Operation(
             summary = "Log out a single device",
             description = "Invalidates the refresh token for a specific device, effectively logging the user out of that session."

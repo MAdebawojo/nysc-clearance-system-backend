@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface UnitService {
     UnitResponseDto createUnitBySuperAdmin(Long userId, UnitRequestDto dto);
-    List<UnitResponseDto> getAllUnitsInPpa(Long ppaId);
+    List<UnitResponseDto> getAllUnitsInPpaById(Long ppaId);
+    List<UnitResponseDto> getSuperAdminUnits(Long userId);
     UnitResponseDto getUnitById(Long id);
     UnitResponseDto updateUnit(Long id, UnitRequestDto dto);
     void deleteUnit(Long id);

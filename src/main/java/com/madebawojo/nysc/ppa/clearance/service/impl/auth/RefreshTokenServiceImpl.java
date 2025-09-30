@@ -89,6 +89,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public void logout(String rawRefreshToken) {
+        log.info("Log out invoked");
         String tokenHash = tok.hash(rawRefreshToken);
 
         Optional<RefreshToken> optionalToken = repo.findByTokenHash(tokenHash);
@@ -129,6 +130,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         // 1) short-lived access token (e.g., 15m)
         Map<String, Object> extraClaims = generateClaims(user);
         String accessToken = jwtUtil.generateToken(extraClaims, user);
+        long accessTokenExpiry = jwtUtil.getExpirationTimeInSeconds(accessToken);
 
         // 2) opaque refresh token (e.g., 30d)
         String rawRefresh = tok.generateRawToken();
@@ -145,6 +147,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 .accessToken(accessToken)
                 .refreshToken(rawRefresh)
                 .tokenType("Bearer")
+                .accessTokenExpiry(accessTokenExpiry)
                 .build();
 
         return TokenIssueResult.builder()

@@ -71,14 +71,26 @@ public class UnitController {
     }
 
     @GetMapping("/ppa/{ppaId}")
+    @PreAuthorize("hasRole('GLOBAL_ADMIN')")
+    @Operation(
+            summary = "Get all Units in a PPA",
+            description = "Retrieves all Units belonging to a specific PPA. Requires GLOBAL_ADMIN role."
+    )
+    public ResponseEntity<ApiResponseStructure<List<UnitResponseDto>>> getUnitsByPpa(@PathVariable Long ppaId) {
+        List<UnitResponseDto> units = unitService.getAllUnitsInPpaById(ppaId);
+        return ResponseEntity.ok(ApiResponseStructure.success("Units retrieved by PPA", units, HttpStatus.OK.value()));
+    }
+
+    @GetMapping("/all")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @Operation(
             summary = "Get all Units in a PPA",
-            description = "Retrieves all Units belonging to a specific PPA. Requires SUPER_ADMIN role."
+            description = "Retrieves all Units belonging to PPA of an Authenticated Super-Admin. Requires SUPER_ADMIN role."
     )
-    public ResponseEntity<ApiResponseStructure<List<UnitResponseDto>>> getUnitsByPpa(@PathVariable Long ppaId) {
-        List<UnitResponseDto> units = unitService.getAllUnitsInPpa(ppaId);
-        return ResponseEntity.ok(ApiResponseStructure.success("Units retrieved by PPA", units, HttpStatus.OK.value()));
+    public ResponseEntity<ApiResponseStructure<List<UnitResponseDto>>> getUnitsInPpaBySuperAdmin(@AuthenticationPrincipal(expression = "id") Long userId) {
+
+        List<UnitResponseDto> units = unitService.getSuperAdminUnits(userId);
+        return ResponseEntity.ok(ApiResponseStructure.success("Units retrieved in PPA", units, HttpStatus.OK.value()));
     }
 
     @PutMapping("/{id}")

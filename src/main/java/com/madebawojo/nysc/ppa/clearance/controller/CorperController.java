@@ -34,7 +34,7 @@ public class CorperController {
     private final CorperServiceImpl corperService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @Operation(
             summary = "Create a new Corper",
             description = "Registers a new Corper. Only ADMIN and SUPER_ADMIN roles can perform this.",
@@ -45,8 +45,8 @@ public class CorperController {
                     @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions")
             }
     )
-    public ResponseEntity<ApiResponseStructure<CorperResponseDto>> createCorper(@Valid @RequestBody CorperRequestDto dto) {
-        CorperResponseDto response = corperService.createCorper(dto);
+    public ResponseEntity<ApiResponseStructure<CorperResponseDto>> createCorper(@AuthenticationPrincipal (expression = "id") Long superAdminId, @Valid @RequestBody CorperRequestDto dto) {
+        CorperResponseDto response = corperService.createCorper(superAdminId, dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -108,11 +108,11 @@ public class CorperController {
         return ResponseEntity.ok(ApiResponseStructure.success("Corpers in unit retrieved successfully", corpers, HttpStatus.OK.value()));
     }
 
-    @GetMapping("/ppa/{ppaId}")
+    @GetMapping("/ppa")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @Operation(summary = "Get all Corpers in a PPA (Super Admin only)")
-    public ResponseEntity<ApiResponseStructure<List<CorperResponseDto>>> getCorpersInPpa(@PathVariable Long ppaId) {
-        List<CorperResponseDto> corpers = corperService.getAllCorpersInPpa(ppaId);
+    public ResponseEntity<ApiResponseStructure<List<CorperResponseDto>>> getCorpersInPpa(@AuthenticationPrincipal(expression = "id") Long superAdminId) {
+        List<CorperResponseDto> corpers = corperService.getAllCorpersInPpa(superAdminId);
         return ResponseEntity.ok(ApiResponseStructure.success("Corpers in PPA retrieved successfully", corpers, HttpStatus.OK.value()));
     }
 

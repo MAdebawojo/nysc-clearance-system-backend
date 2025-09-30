@@ -6,12 +6,14 @@ import com.madebawojo.nysc.ppa.clearance.dto.request.ppa.UnitRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ppa.UnitResponseDto;
 import com.madebawojo.nysc.ppa.clearance.entity.ppa.Ppa;
 import com.madebawojo.nysc.ppa.clearance.entity.ppa.Unit;
+import com.madebawojo.nysc.ppa.clearance.entity.user.User;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Admin;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Corper;
 import com.madebawojo.nysc.ppa.clearance.repository.AdminRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.CorperRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
 import com.madebawojo.nysc.ppa.clearance.repository.UnitRepository;
+import com.madebawojo.nysc.ppa.clearance.service.impl.auth.AuthServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.impl.usercat.SuperAdminServiceImpl;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.ppa.UnitService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,7 @@ public class UnitServiceImpl implements UnitService {
     private final CorperRepository corperRepository;
 
     private final SuperAdminServiceImpl superAdminService;
+    private final AuthServiceImpl authService;
 
     @Override
     public UnitResponseDto createUnitBySuperAdmin(Long userId, UnitRequestDto dto) {
@@ -53,13 +57,43 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public List<UnitResponseDto> getAllUnitsInPpa(Long ppaId) {
-        Ppa ppa = ppaRepository.findById(ppaId)
-                .orElseThrow(() -> new ResourceNotFoundException("PPA not found"));
+    public List<UnitResponseDto> getAllUnitsInPpaById(Long ppaId) {
+        log.info("Fetching all Units for PPA with id: {}", ppaId);
 
-        return unitRepository.findAllByPpa(ppa).stream()
+        Ppa ppa = ppaRepository.findById(ppaId)
+                .orElseThrow(() -> {
+                    log.error("PPA not found with id: {}", ppaId);
+                    return new ResourceNotFoundException("PPA not found");
+                });
+
+        List<UnitResponseDto> units = unitRepository.findAllByPpa(ppa).stream()
                 .map(UnitMapper::toDto)
                 .collect(Collectors.toList());
+
+        log.info("Found {} unit(s) for PPA with id: {}", units.size(), ppaId);
+
+        return units;
+    }
+
+    @Override
+    public List<UnitResponseDto> getSuperAdminUnits(Long userId) {
+        log.info("Fetching Units for SuperAdmin with userId: {}", userId);
+
+        Ppa ppa = superAdminService.getSuperAdminEntityById(userId).getPpa();
+
+        if (ppa == null) {
+            log.warn("SuperAdmin with userId: {} has no assigned PPA", userId);
+            return Collections.emptyList();
+        }
+
+        List<UnitResponseDto> units = unitRepository.findAllByPpa(ppa).stream()
+                .map(UnitMapper::toDto)
+                .collect(Collectors.toList());
+
+        log.info("SuperAdmin with userId: {} has {} unit(s) in PPA id: {}",
+                userId, units.size(), ppa.getId());
+
+        return units;
     }
 
     @Override

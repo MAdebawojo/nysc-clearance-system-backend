@@ -1,5 +1,6 @@
 package com.madebawojo.nysc.ppa.clearance.service.impl.usercat;
 
+import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.BusinessConflictException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.UserAlreadyExistsException;
 import com.madebawojo.nysc.ppa.clearance.dto.mapper.SuperAdminMapper;
@@ -20,6 +21,7 @@ import com.madebawojo.nysc.ppa.clearance.service.servicecontract.usercat.SuperAd
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,11 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         if (userRepository.existsByEmail(request.getEmail())) {
             log.warn("Super Admin creation failed — email already in use: {}", request.getEmail());
             throw new UserAlreadyExistsException("Email is already in use");
+        }
+
+        if(superAdminRepository.existsByPpaId(request.getPpaId())){
+            log.warn("Assignment failed: PPA {} already has a super-admin assigned", request.getPpaId());
+            throw new ApiException("This PPA already has a super-admin assigned", HttpStatus.BAD_REQUEST);
         }
 
         User user = User.builder()

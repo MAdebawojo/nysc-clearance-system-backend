@@ -7,6 +7,7 @@ import com.madebawojo.nysc.ppa.clearance.dto.request.ppa.UpdatePpaRequestDto;
 import com.madebawojo.nysc.ppa.clearance.dto.response.ppa.PpaResponseDto;
 import com.madebawojo.nysc.ppa.clearance.entity.ppa.Ppa;
 import com.madebawojo.nysc.ppa.clearance.repository.PpaRepository;
+import com.madebawojo.nysc.ppa.clearance.repository.SuperAdminRepository;
 import com.madebawojo.nysc.ppa.clearance.service.servicecontract.ppa.PpaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
