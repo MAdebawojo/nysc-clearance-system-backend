@@ -11,7 +11,7 @@ public class CancelClearanceRequestDto {
     @NotNull(message = "Request ID is required")
     private Long id;
 
-    @JsonProperty("cancellation_reason")
-    @NotBlank(message = "Provide a reason for your cancellation")
-    private String cancellationReason;
+//    @JsonProperty("cancellation_reason")
+//    @NotBlank(message = "Provide a reason for your cancellation")
+//    private String cancellationReason;
 }

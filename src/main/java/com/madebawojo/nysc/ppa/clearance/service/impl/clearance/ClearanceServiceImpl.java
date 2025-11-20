@@ -74,7 +74,7 @@ public class ClearanceServiceImpl implements ClearanceService {
                 .max(Comparator.comparing(ClearanceRequest::getCreatedAt));
 
         existingRequest.ifPresent(req -> {
-            if (req.getStatus() != ClearanceStatus.REJECTED) {
+            if (req.getStatus() != ClearanceStatus.REJECTED && req.getStatus() != ClearanceStatus.CANCELLED) {
                 throw new ApiException("You already requested clearance for that month", HttpStatus.CONFLICT);
             }
         });
@@ -91,7 +91,7 @@ public class ClearanceServiceImpl implements ClearanceService {
     }
 
     @Override
-    public CancelClearanceResponseDto cancelRequest(Long corperId, Long requestId, String reason) {
+    public CancelClearanceResponseDto cancelRequest(Long corperId, Long requestId) {
         log.info("Corper {} attempting to cancel clearance request {}", corperId, requestId);
 
         ClearanceRequest request = getClearanceRequest(requestId);
@@ -109,7 +109,6 @@ public class ClearanceServiceImpl implements ClearanceService {
         }
 
         request.setStatus(ClearanceStatus.CANCELLED);
-        request.setCancellationReason(reason);
         ClearanceRequest savedRequest = clearanceRepo.save(request);
 
         log.info("Clearance request {} cancelled by Corper {}", requestId, corperId);
@@ -143,7 +142,7 @@ public class ClearanceServiceImpl implements ClearanceService {
     }
 
     @Override
-    public RejectClearanceDto rejectByUnitHead(Long requestId, Long unitHeadId, String reason) {
+    public RejectClearanceDto rejectByUnitHead(Long requestId, Long unitHeadId, String rejectionReason) {
         log.info("UnitHead {} attempting to reject clearance request {}", unitHeadId, requestId);
 
         ClearanceRequest request = getClearanceRequest(requestId);
@@ -161,11 +160,11 @@ public class ClearanceServiceImpl implements ClearanceService {
         }
 
         request.setStatus(ClearanceStatus.REJECTED);
-        request.setRejectionReason(reason);
+        request.setRejectionReason(rejectionReason);
 
         ClearanceRequest savedRequest = clearanceRepo.save(request);
 
-        log.info("Clearance request {} rejected by Unit-Head {} with reason: {}", requestId, unitHeadId, reason);
+        log.info("Clearance request {} rejected by Unit-Head {}", requestId, unitHeadId);
         return ClearanceMapper.rejectResponseDto(savedRequest);
     }
 
@@ -192,7 +191,7 @@ public class ClearanceServiceImpl implements ClearanceService {
     }
 
     @Override
-    public RejectClearanceDto rejectBySuperAdmin(Long requestId, Long superAdminId, String reason) {
+    public RejectClearanceDto rejectBySuperAdmin(Long requestId, Long superAdminId, String rejectionReason) {
         log.info("Super Admin {} attempting to reject clearance request {}", superAdminId, requestId);
 
         ClearanceRequest request = getClearanceRequest(requestId);
@@ -206,11 +205,11 @@ public class ClearanceServiceImpl implements ClearanceService {
         }
 
         request.setStatus(ClearanceStatus.REJECTED);
-        request.setRejectionReason(reason);
+        request.setRejectionReason(rejectionReason);
 
         ClearanceRequest savedRequest = clearanceRepo.save(request);
 
-        log.info("Clearance request {} rejected by Super-Admin {} with reason: {}", requestId, superAdminId, reason);
+        log.info("Clearance request {} rejected by Super-Admin {}", requestId, superAdminId);
         return ClearanceMapper.rejectResponseDto(savedRequest);
     }
 

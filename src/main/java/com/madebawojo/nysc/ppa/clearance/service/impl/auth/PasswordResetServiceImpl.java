@@ -54,6 +54,8 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
         log.info("Password reset requested for user {}", user.getEmail());
 
+        log.info("Password reset link is: {}", resetLink);
+
         emailService.sendResetPasswordEmail(user, resetLink);
     }
 
@@ -75,6 +77,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
     @Override
     public void resetPassword(String rawToken, String newPassword) {
+
         PasswordToken rt = validateToken(rawToken, PasswordTokenType.RESET);
 
         User user = rt.getUser();

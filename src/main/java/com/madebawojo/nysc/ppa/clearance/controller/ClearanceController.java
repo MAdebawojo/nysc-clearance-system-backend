@@ -57,7 +57,7 @@ public class ClearanceController {
         return ResponseEntity.ok(ApiResponseStructure.success("Clearance Request created successfully", response, HttpStatus.CREATED.value()));
     }
 
-    @PatchMapping("/requests")
+    @PatchMapping("/requests/{requestId}")
     @PreAuthorize("hasRole('CORPER')")
     @Operation(
             summary = "Cancel Clearance Request",
@@ -70,9 +70,9 @@ public class ClearanceController {
     })
     public ResponseEntity<ApiResponseStructure<CancelClearanceResponseDto>> cancelRequest(
             @AuthenticationPrincipal(expression = "id") Long corperId,
-            @Valid @RequestBody CancelClearanceRequestDto dto
+            @PathVariable Long requestId
     ) {
-        CancelClearanceResponseDto response = clearanceService.cancelRequest(corperId, dto.getId(), dto.getCancellationReason());
+        CancelClearanceResponseDto response = clearanceService.cancelRequest(corperId, requestId);
         return ResponseEntity.ok(ApiResponseStructure.success("Clearance Request has been successfully cancelled", response, HttpStatus.OK.value()));
     }
 
@@ -92,7 +92,7 @@ public class ClearanceController {
 
 
     // --- UNIT HEAD ACTIONS ---
-    @PostMapping("/unit-head/approve/{requestId}")
+    @PatchMapping("/unit-head/approve/{requestId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Approve Clearance Request (Unit Head)",
@@ -110,7 +110,7 @@ public class ClearanceController {
         return ResponseEntity.ok(ApiResponseStructure.success("Approved successfully", response, HttpStatus.OK.value()));
     }
 
-    @PostMapping("/unit-head/reject/{requestId}")
+    @PatchMapping("/unit-head/reject/{requestId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Reject Clearance Request (Unit Head)",
@@ -120,12 +120,20 @@ public class ClearanceController {
             @ApiResponse(responseCode = "200", description = "Request rejected successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid reason"),
     })
+//    public ResponseEntity<ApiResponseStructure<RejectClearanceDto>> rejectByUnitHead(
+//            @AuthenticationPrincipal(expression = "id") Long unitHeadId,
+//            @Valid @PathVariable Long requestId
+//    ) {
+//        RejectClearanceDto response = clearanceService.rejectByUnitHead(requestId, unitHeadId);
+//        return ResponseEntity.ok(ApiResponseStructure.success("Clearance request rejected successfully", response, HttpStatus.OK.value()));
+//
+//    }
+
     public ResponseEntity<ApiResponseStructure<RejectClearanceDto>> rejectByUnitHead(
             @AuthenticationPrincipal(expression = "id") Long unitHeadId,
-            @Valid @PathVariable Long requestId,
-            @Valid @RequestBody RejectClearanceRequestDto dto
+            @Valid @PathVariable Long requestId, @Valid @RequestBody RejectClearanceRequestDto rejectRequest
     ) {
-        RejectClearanceDto response = clearanceService.rejectByUnitHead(requestId, unitHeadId, dto.getReason());
+        RejectClearanceDto response = clearanceService.rejectByUnitHead(requestId, unitHeadId, rejectRequest.getReason());
         return ResponseEntity.ok(ApiResponseStructure.success("Clearance request rejected successfully", response, HttpStatus.OK.value()));
 
     }
@@ -147,7 +155,7 @@ public class ClearanceController {
 
 
     // --- SUPER ADMIN ACTIONS ---
-    @PostMapping("/super-admin/approve/{requestId}")
+    @PatchMapping("/super-admin/approve/{requestId}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @Operation(
             summary = "Approve Clearance Request (SuperAdmin)",
@@ -165,19 +173,26 @@ public class ClearanceController {
         return ResponseEntity.ok(ApiResponseStructure.success("Clearance request approved successfully", response, HttpStatus.OK.value()));
     }
 
-    @PostMapping("/super-admin/reject/{requestId}")
+    @PatchMapping("/super-admin/reject/{requestId}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @Operation(
             summary = "Reject Clearance Request (Super Admin)",
             description = "Allows a super admin to reject a clearance request with a reason."
     )
     @ApiResponse(responseCode = "200", description = "Clearance request rejected successfully")
+//    public ResponseEntity<ApiResponseStructure<RejectClearanceDto>> rejectBySuperAdmin(
+//            @AuthenticationPrincipal(expression = "id") Long superAdminId,
+//            @Valid @PathVariable Long requestId
+//    ) {
+//        RejectClearanceDto response = clearanceService.rejectBySuperAdmin(requestId, superAdminId);
+//        return ResponseEntity.ok(ApiResponseStructure.success("Clearance requests retrieved successfully", response, HttpStatus.OK.value()));
+//    }
+
     public ResponseEntity<ApiResponseStructure<RejectClearanceDto>> rejectBySuperAdmin(
             @AuthenticationPrincipal(expression = "id") Long superAdminId,
-            @Valid @PathVariable Long requestId,
-            @Valid @RequestBody RejectClearanceRequestDto dto
+            @Valid @PathVariable Long requestId,  @Valid @RequestBody RejectClearanceRequestDto rejectRequest
     ) {
-        RejectClearanceDto response = clearanceService.rejectBySuperAdmin(requestId, superAdminId, dto.getReason());
+        RejectClearanceDto response = clearanceService.rejectBySuperAdmin(requestId, superAdminId, rejectRequest.getReason());
         return ResponseEntity.ok(ApiResponseStructure.success("Clearance requests retrieved successfully", response, HttpStatus.OK.value()));
     }
 

@@ -26,10 +26,10 @@ public interface ClearanceRequestRepository extends JpaRepository<ClearanceReque
     // Optionally, filter by status too
     List<ClearanceRequest> findByCorper_IdAndStatus(Long corperId, ClearanceStatus status);
 
-    @Query("SELECT cr FROM ClearanceRequest cr WHERE cr.corper.unit.id = :unitId")
+    @Query("SELECT cr FROM ClearanceRequest cr WHERE cr.corper.unit.id = :unitId AND cr.status IN ('LEVEL_ONE', 'PENDING', 'REJECTED')")
     List<ClearanceRequest> findAllByUnitId(@Param("unitId") Long unitId);
 
-    @Query("SELECT cr FROM ClearanceRequest cr WHERE cr.corper.ppa.id = :ppaId")
+    @Query("SELECT cr FROM ClearanceRequest cr WHERE cr.corper.ppa.id = :ppaId AND cr.status IN ('LEVEL_ONE', 'CLEARED', 'REJECTED')")
     List<ClearanceRequest> findAllByPpaId(@Param("ppaId") Long ppaId);
 //    List<ClearanceRequest> findByPpa_Id(Long ppaId);
 

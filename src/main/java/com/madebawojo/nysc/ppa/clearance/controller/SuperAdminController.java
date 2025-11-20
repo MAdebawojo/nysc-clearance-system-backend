@@ -53,10 +53,10 @@ public class SuperAdminController {
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdSuperAdmin.getId()).toUri();
 
-        log.info("Location header for created Super Admin: {}", location);
+        log.info("Super Admin successfully created. Location header for created Super Admin: {}", location);
         return ResponseEntity
                 .created(location)
-                .body(ApiResponseStructure.success("Super Admin created successfully. Email verification link has been sent to the registered account.", createdSuperAdmin, HttpStatus.CREATED.value()));
+                .body(ApiResponseStructure.success("Email verification link has been sent to the registered account.", createdSuperAdmin, HttpStatus.CREATED.value()));
 
     }
 

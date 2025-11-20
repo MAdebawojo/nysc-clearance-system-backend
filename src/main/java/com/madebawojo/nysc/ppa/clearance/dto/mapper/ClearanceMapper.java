@@ -29,7 +29,7 @@ public class ClearanceMapper {
                 .clearanceMonth(request.getClearanceMonth())
                 .tentativeDate(request.getTentativeDate())
                 .status(request.getStatus())
-                .cancellationReason(request.getCancellationReason())
+//                .cancellationReason(request.getCancellationReason())
                 .build();
     }
 

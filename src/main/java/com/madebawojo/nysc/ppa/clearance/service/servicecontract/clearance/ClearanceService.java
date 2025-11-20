@@ -10,16 +10,16 @@ import java.util.List;
 public interface ClearanceService {
     // Corper actions
     ClearanceResponseDto createRequest(Long corperId, ClearanceRequestDto dto);
-    CancelClearanceResponseDto cancelRequest(Long corperId, Long requestId, String reason);
+    CancelClearanceResponseDto cancelRequest(Long corperId, Long requestId);
 //    ClearanceRequest resubmitRequest(Long corperId, Long requestId, ClearanceRequestDto dto);
 
     // Unit Head actions
     ClearanceResponseDto approveByUnitHead(Long requestId, Long unitHeadId);
-    RejectClearanceDto rejectByUnitHead(Long requestId, Long unitHeadId, String reason);
+    RejectClearanceDto rejectByUnitHead(Long requestId, Long unitHeadId, String rejectionReason);
 
     // Super Admin actions
     ClearanceResponseDto approveBySuperAdmin(Long requestId, Long superAdminId);
-    RejectClearanceDto rejectBySuperAdmin(Long requestId, Long superAdminId, String reason);
+    RejectClearanceDto rejectBySuperAdmin(Long requestId, Long superAdminId, String rejectionReason);
 
     // Views
     List<ClearanceResponseDto> getRequestsForCorper(Long corperId);

@@ -33,9 +33,9 @@ public class ClearanceRequest {
 
     @Column(nullable = true)
     private String rejectionReason;
-
-    @Column(nullable = true)
-    private String cancellationReason;
+//
+//    @Column(nullable = true)
+//    private String cancellationReason;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "corper_id", nullable = false)
