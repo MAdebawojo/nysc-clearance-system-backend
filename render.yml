@@ -1,0 +1,48 @@
+spring:
+  profiles:
+    active:
+      demo
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      database-platform: org.hibernate.dialect.MySQL8Dialect  # Use MySQL 8 dialect for compatibility    
+  security:
+    user:
+      name: ${APP_USER}
+      password: ${APP_PASSWORD}
+  logging:
+    level:
+      root:
+        debug
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USER}
+    password: ${EMAIL_PASSWORD}
+    properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+              required: true
+global:
+  admin:
+    email: ${GLOBAL_ADMIN_EMAIL}
+    password: ${GLOBAL_ADMIN_PASSWORD}
+    firstName: Global
+    lastName: Admin
+    role: GLOBAL_ADMIN
+
+app:
+  security:
+    password:
+      setupTokenExpiry: 48h
+      resetTokenExpiry: 1h
+      accessTokenExpiry: 30m
+
