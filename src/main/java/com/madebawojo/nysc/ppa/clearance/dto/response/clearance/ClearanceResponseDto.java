@@ -22,4 +22,6 @@ public class ClearanceResponseDto {
     @JsonProperty("clearance_month")
     private Month clearanceMonth;
     private ClearanceStatus status;
+    @JsonProperty("rejection_reason")
+    private String rejectionReason;
 }

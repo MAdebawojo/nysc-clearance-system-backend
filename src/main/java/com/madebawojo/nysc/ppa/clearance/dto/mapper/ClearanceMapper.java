@@ -16,6 +16,7 @@ public class ClearanceMapper {
                 .clearanceMonth(request.getClearanceMonth())
                 .tentativeDate(request.getTentativeDate())
                 .status(request.getStatus())
+                .rejectionReason(request.getRejectionReason())
                 .build();
     }
 

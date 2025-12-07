@@ -16,6 +16,8 @@ public interface ClearanceRequestRepository extends JpaRepository<ClearanceReque
     // Fetch all requests for a corper
     List<ClearanceRequest> findByCorper_Id(Long corperId);
 
+    int deleteByCorper_Id(Long corperId);
+
     // Check if a request already exists for this corper and month
 //    Optional<ClearanceRequest> findByCorper_IdAndClearanceMonth(Long corperId, Month clearanceMonth);
     List<ClearanceRequest> findByCorper_IdAndClearanceMonth(Long corperId, Month clearanceMonth);
