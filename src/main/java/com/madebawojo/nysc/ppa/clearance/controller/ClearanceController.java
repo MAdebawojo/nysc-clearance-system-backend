@@ -271,5 +271,25 @@ public class ClearanceController {
 
         return ResponseEntity.ok(ApiResponseStructure.success("Clearance requests for PPA retrieved successfully", response, HttpStatus.OK.value()));
     }
-}
+
+    @GetMapping("/ppa/history")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @Operation(
+            summary = "Get Clearance History for PPA",
+            description = "Fetch all processed clearance requests for the PPA (excluding cleared requests)."
+    )
+    @ApiResponse(responseCode = "200", description = "PPA clearance history retrieved successfully")
+    public ResponseEntity<ApiResponseStructure<List<ClearanceResponseDto>>> getClearanceHistoryForPpa(
+            @AuthenticationPrincipal(expression = "id") Long superAdminId
+    ) {
+        Long ppaId = superAdminService.getSuperAdminEntityById(superAdminId)
+                .getPpa()
+                .getId();
+
+        List<ClearanceResponseDto> response = clearanceService.getClearanceHistoryForPpa(ppaId);
+
+        return ResponseEntity.ok(
+                ApiResponseStructure.success("PPA clearance history retrieved successfully", response, HttpStatus.OK.value())
+        );
+    }
 
