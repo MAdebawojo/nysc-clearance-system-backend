@@ -282,6 +282,34 @@ public class ClearanceServiceImpl implements ClearanceService {
     }
 
     @Override
+    public List<ClearanceResponseDto> getClearanceHistoryForPpa(Long ppaId) {
+        Ppa ppa = ppaService.getPpaEntityById(ppaId);
+
+        log.info("Fetching clearance history for ppa with ID {}", ppaId);
+
+        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
+
+        return requests.stream()
+                .filter(request -> request.getStatus() != ClearanceStatus.CLEARED)
+                .map(ClearanceMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<ClearanceResponseDto> getNewClearanceRequestsForPpa(Long ppaId) {
+        Ppa ppa = ppaService.getPpaEntityById(ppaId);
+
+        log.info("Fetching new clearance requests for ppa with ID {}", ppaId);
+
+        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
+
+        return requests.stream()
+                .filter(request -> request.getStatus() == ClearanceStatus.LEVEL_ONE)
+                .map(ClearanceMapper::toDto)
+                .toList();
+    }
+
+    @Override
     public byte[] downloadClearancePDF(Long requestId) {
         ClearanceRequest request = getClearanceRequest(requestId);
 
