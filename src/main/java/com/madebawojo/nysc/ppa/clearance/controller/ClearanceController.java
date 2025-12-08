@@ -306,3 +306,12 @@ public class ClearanceController {
         Long ppaId = superAdminService.getSuperAdminEntityById(superAdminId)
                 .getPpa()
                 .getId();
+
+        List<ClearanceResponseDto> response = clearanceService.getNewClearanceRequestsForPpa(ppaId);
+
+        return ResponseEntity.ok(
+                ApiResponseStructure.success("New PPA clearance requests retrieved successfully", response, HttpStatus.OK.value())
+        );
+    }
+
+}
