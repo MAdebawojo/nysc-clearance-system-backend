@@ -173,45 +173,6 @@ public class ClearanceController {
 
     }
 
-    @GetMapping("/unit-head/history")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
-            summary = "Get Clearance History for Unit",
-            description = "Returns all processed clearance requests for the unit (excluding pending requests)."
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "History fetched successfully"),
-            @ApiResponse(responseCode = "404", description = "Unit head not found"),
-    })
-    public ResponseEntity<ApiResponseStructure<List<ClearanceResponseDto>>> getClearanceHistory(
-            @AuthenticationPrincipal(expression = "id") Long unitHeadId
-    ) {
-        List<ClearanceResponseDto> response = clearanceService.getClearanceHistoryForUnit(unitHeadId);
-        return ResponseEntity.ok(
-                ApiResponseStructure.success("Clearance history fetched successfully", response, HttpStatus.OK.value())
-        );
-    }
-
-    @GetMapping("/unit-head/new-requests")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
-            summary = "Get New Clearance Requests for Unit",
-            description = "Returns all pending clearance requests for the unit."
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "New requests fetched successfully"),
-            @ApiResponse(responseCode = "404", description = "Unit head not found"),
-    })
-    public ResponseEntity<ApiResponseStructure<List<ClearanceResponseDto>>> getNewClearanceRequests(
-            @AuthenticationPrincipal(expression = "id") Long unitHeadId
-    ) {
-        List<ClearanceResponseDto> response = clearanceService.getNewClearanceRequestsForUnit(unitHeadId);
-        return ResponseEntity.ok(
-                ApiResponseStructure.success("New clearance requests fetched successfully", response, HttpStatus.OK.value())
-        );
-    }
-
-
 
     // --- SUPER ADMIN ACTIONS ---
     @PatchMapping("/super-admin/approve/{requestId}")
@@ -271,47 +232,5 @@ public class ClearanceController {
 
         return ResponseEntity.ok(ApiResponseStructure.success("Clearance requests for PPA retrieved successfully", response, HttpStatus.OK.value()));
     }
-
-    @GetMapping("/ppa/history")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @Operation(
-            summary = "Get Clearance History for PPA",
-            description = "Fetch all processed clearance requests for the PPA (excluding cleared requests)."
-    )
-    @ApiResponse(responseCode = "200", description = "PPA clearance history retrieved successfully")
-    public ResponseEntity<ApiResponseStructure<List<ClearanceResponseDto>>> getClearanceHistoryForPpa(
-            @AuthenticationPrincipal(expression = "id") Long superAdminId
-    ) {
-        Long ppaId = superAdminService.getSuperAdminEntityById(superAdminId)
-                .getPpa()
-                .getId();
-
-        List<ClearanceResponseDto> response = clearanceService.getClearanceHistoryForPpa(ppaId);
-
-        return ResponseEntity.ok(
-                ApiResponseStructure.success("PPA clearance history retrieved successfully", response, HttpStatus.OK.value())
-        );
-    }
-
-    @GetMapping("/ppa/new-requests")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @Operation(
-            summary = "Get New Clearance Requests for PPA",
-            description = "Fetch all new clearance requests for the PPA (requests at LEVEL_ONE status)."
-    )
-    @ApiResponse(responseCode = "200", description = "New PPA clearance requests retrieved successfully")
-    public ResponseEntity<ApiResponseStructure<List<ClearanceResponseDto>>> getNewClearanceRequestsForPpa(
-            @AuthenticationPrincipal(expression = "id") Long superAdminId
-    ) {
-        Long ppaId = superAdminService.getSuperAdminEntityById(superAdminId)
-                .getPpa()
-                .getId();
-
-        List<ClearanceResponseDto> response = clearanceService.getNewClearanceRequestsForPpa(ppaId);
-
-        return ResponseEntity.ok(
-                ApiResponseStructure.success("New PPA clearance requests retrieved successfully", response, HttpStatus.OK.value())
-        );
-    }
-
 }
+
