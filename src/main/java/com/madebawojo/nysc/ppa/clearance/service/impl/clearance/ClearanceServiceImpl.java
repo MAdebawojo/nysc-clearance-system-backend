@@ -191,6 +191,18 @@ public class ClearanceServiceImpl implements ClearanceService {
     }
 
     @Override
+    public void deleteAllMyClearanceRequests(Long corperId) {
+        int deleted = clearanceRepo.deleteByCorper_Id(corperId);
+
+        if (deleted > 0) {
+            log.info("Deleted {} clearance requests for corper {}", deleted, corperId);
+        } else {
+            log.warn("No clearance requests found for corper {}", corperId);
+        }
+    }
+
+
+    @Override
     public RejectClearanceDto rejectBySuperAdmin(Long requestId, Long superAdminId, String rejectionReason) {
         log.info("Super Admin {} attempting to reject clearance request {}", superAdminId, requestId);
 
