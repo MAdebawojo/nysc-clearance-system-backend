@@ -29,4 +29,12 @@ public interface ClearanceService {
     void deleteAllMyClearanceRequests(Long corperId);
 
     byte[] downloadClearancePDF(Long requestId);
+
+    List<ClearanceResponseDto> getNewClearanceRequestsForUnit(Long unitHeadId);
+
+    List<ClearanceResponseDto> getClearanceHistoryForUnit(Long unitHeadId);
+
+    List<ClearanceResponseDto> getNewClearanceRequestsForPpa(Long ppaId);
+
+    List<ClearanceResponseDto> getClearanceHistoryForPpa(Long ppaId);
 }
