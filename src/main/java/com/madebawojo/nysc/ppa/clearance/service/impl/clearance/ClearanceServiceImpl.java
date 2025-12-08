@@ -191,18 +191,6 @@ public class ClearanceServiceImpl implements ClearanceService {
     }
 
     @Override
-    public void deleteAllMyClearanceRequests(Long corperId) {
-        int deleted = clearanceRepo.deleteByCorper_Id(corperId);
-
-        if (deleted > 0) {
-            log.info("Deleted {} clearance requests for corper {}", deleted, corperId);
-        } else {
-            log.warn("No clearance requests found for corper {}", corperId);
-        }
-    }
-
-
-    @Override
     public RejectClearanceDto rejectBySuperAdmin(Long requestId, Long superAdminId, String rejectionReason) {
         log.info("Super Admin {} attempting to reject clearance request {}", superAdminId, requestId);
 
@@ -289,34 +277,6 @@ public class ClearanceServiceImpl implements ClearanceService {
 
         List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
         return requests.stream()
-                .map(ClearanceMapper::toDto)
-                .toList();
-    }
-
-    @Override
-    public List<ClearanceResponseDto> getClearanceHistoryForPpa(Long ppaId) {
-        Ppa ppa = ppaService.getPpaEntityById(ppaId);
-
-        log.info("Fetching clearance history for ppa with ID {}", ppaId);
-
-        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
-
-        return requests.stream()
-                .filter(request -> request.getStatus() != ClearanceStatus.CLEARED)
-                .map(ClearanceMapper::toDto)
-                .toList();
-    }
-
-    @Override
-    public List<ClearanceResponseDto> getNewClearanceRequestsForPpa(Long ppaId) {
-        Ppa ppa = ppaService.getPpaEntityById(ppaId);
-
-        log.info("Fetching new clearance requests for ppa with ID {}", ppaId);
-
-        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
-
-        return requests.stream()
-                .filter(request -> request.getStatus() == ClearanceStatus.LEVEL_ONE)
                 .map(ClearanceMapper::toDto)
                 .toList();
     }
