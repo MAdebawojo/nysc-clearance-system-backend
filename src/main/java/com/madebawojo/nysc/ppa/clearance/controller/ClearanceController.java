@@ -293,3 +293,16 @@ public class ClearanceController {
         );
     }
 
+    @GetMapping("/ppa/new-requests")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @Operation(
+            summary = "Get New Clearance Requests for PPA",
+            description = "Fetch all new clearance requests for the PPA (requests at LEVEL_ONE status)."
+    )
+    @ApiResponse(responseCode = "200", description = "New PPA clearance requests retrieved successfully")
+    public ResponseEntity<ApiResponseStructure<List<ClearanceResponseDto>>> getNewClearanceRequestsForPpa(
+            @AuthenticationPrincipal(expression = "id") Long superAdminId
+    ) {
+        Long ppaId = superAdminService.getSuperAdminEntityById(superAdminId)
+                .getPpa()
+                .getId();
