@@ -173,6 +173,45 @@ public class ClearanceController {
 
     }
 
+    @GetMapping("/unit-head/history")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Get Clearance History for Unit",
+            description = "Returns all processed clearance requests for the unit (excluding pending requests)."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "History fetched successfully"),
+            @ApiResponse(responseCode = "404", description = "Unit head not found"),
+    })
+    public ResponseEntity<ApiResponseStructure<List<ClearanceResponseDto>>> getClearanceHistory(
+            @AuthenticationPrincipal(expression = "id") Long unitHeadId
+    ) {
+        List<ClearanceResponseDto> response = clearanceService.getClearanceHistoryForUnit(unitHeadId);
+        return ResponseEntity.ok(
+                ApiResponseStructure.success("Clearance history fetched successfully", response, HttpStatus.OK.value())
+        );
+    }
+
+    @GetMapping("/unit-head/new-requests")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Get New Clearance Requests for Unit",
+            description = "Returns all pending clearance requests for the unit."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "New requests fetched successfully"),
+            @ApiResponse(responseCode = "404", description = "Unit head not found"),
+    })
+    public ResponseEntity<ApiResponseStructure<List<ClearanceResponseDto>>> getNewClearanceRequests(
+            @AuthenticationPrincipal(expression = "id") Long unitHeadId
+    ) {
+        List<ClearanceResponseDto> response = clearanceService.getNewClearanceRequestsForUnit(unitHeadId);
+        return ResponseEntity.ok(
+                ApiResponseStructure.success("New clearance requests fetched successfully", response, HttpStatus.OK.value())
+        );
+    }
+
+
 
     // --- SUPER ADMIN ACTIONS ---
     @PatchMapping("/super-admin/approve/{requestId}")
