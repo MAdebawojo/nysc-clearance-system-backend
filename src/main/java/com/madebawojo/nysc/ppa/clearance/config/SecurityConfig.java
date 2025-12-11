@@ -38,10 +38,10 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(PathRequest.toH2Console()).permitAll() // Allow H2 console access
+//                                .requestMatchers(PathRequest.toH2Console()).permitAll() // Allow H2 console access
 //                                .requestMatchers("/api/v1/ppas/**").permitAll()
 //                                .requestMatchers("/api/v1/super-admin/**").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll()
+//                                .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers("/api/v1/resources/**").permitAll()
 //                                .requestMatchers("/api/v1/clearance-docs/**").permitAll()
@@ -58,7 +58,7 @@ public class SecurityConfig {
                                 .ignoringRequestMatchers("/api/**")
                                 .ignoringRequestMatchers("/swagger-ui/**", "/v3/api-docs/**")
 //                        .ignoringRequestMatchers("/api/v1/auth/**") // Disable CSRF for /auth routes as well
-                                .ignoringRequestMatchers(PathRequest.toH2Console()) // Disable CSRF for H2 console
+//                                .ignoringRequestMatchers(PathRequest.toH2Console()) // Disable CSRF for H2 console
 //                                .ignoringRequestMatchers("/api/v1/ppas/**")
 //                                .ignoringRequestMatchers("/api/v1/super-admin/**")
 
