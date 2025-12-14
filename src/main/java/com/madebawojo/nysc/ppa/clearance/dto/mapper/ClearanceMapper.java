@@ -17,7 +17,7 @@ public class ClearanceMapper {
                 .tentativeDate(request.getTentativeDate())
                 .status(request.getStatus())
                 .rejectionReason(request.getRejectionReason())
-                .rejectedBy(request.getRejectedBy())
+                .rejectedBy(request.getRejectedBy().name())
                 .build();
     }
 
