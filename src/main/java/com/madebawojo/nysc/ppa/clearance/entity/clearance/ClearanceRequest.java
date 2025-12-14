@@ -1,6 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.entity.clearance;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.ClearanceStatus;
+import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
 import com.madebawojo.nysc.ppa.clearance.entity.user.profile.Corper;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,6 +34,9 @@ public class ClearanceRequest {
 
     @Column(nullable = true)
     private String rejectionReason;
+
+    @Column(nullable = true)
+    private Role rejectedBy;
 //
 //    @Column(nullable = true)
 //    private String cancellationReason;

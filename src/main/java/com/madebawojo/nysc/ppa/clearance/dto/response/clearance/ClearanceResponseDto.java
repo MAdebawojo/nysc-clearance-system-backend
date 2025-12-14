@@ -24,4 +24,6 @@ public class ClearanceResponseDto {
     private ClearanceStatus status;
     @JsonProperty("rejection_reason")
     private String rejectionReason;
+    @JsonProperty("rejected_by")
+    private String rejectedBy;
 }

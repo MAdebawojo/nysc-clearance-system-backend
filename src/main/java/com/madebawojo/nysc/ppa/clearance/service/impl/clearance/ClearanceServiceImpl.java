@@ -1,6 +1,7 @@
 package com.madebawojo.nysc.ppa.clearance.service.impl.clearance;
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.ClearanceStatus;
+import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ApiException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.ResourceNotFoundException;
 import com.madebawojo.nysc.ppa.clearance.core.exception.UnauthorizedException;
@@ -161,6 +162,7 @@ public class ClearanceServiceImpl implements ClearanceService {
 
         request.setStatus(ClearanceStatus.REJECTED);
         request.setRejectionReason(rejectionReason);
+        request.setRejectedBy(Role.ADMIN);
 
         ClearanceRequest savedRequest = clearanceRepo.save(request);
 
@@ -218,6 +220,7 @@ public class ClearanceServiceImpl implements ClearanceService {
 
         request.setStatus(ClearanceStatus.REJECTED);
         request.setRejectionReason(rejectionReason);
+        request.setRejectedBy(Role.SUPER_ADMIN);
 
         ClearanceRequest savedRequest = clearanceRepo.save(request);
 
@@ -302,7 +305,7 @@ public class ClearanceServiceImpl implements ClearanceService {
         List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
 
         return requests.stream()
-                .filter(request -> request.getStatus() != ClearanceStatus.CLEARED)
+                .filter(request -> request.getStatus() != ClearanceStatus.LEVEL_ONE)
                 .map(ClearanceMapper::toDto)
                 .toList();
     }
