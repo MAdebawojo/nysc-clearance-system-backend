@@ -246,7 +246,7 @@ public class ClearanceServiceImpl implements ClearanceService {
         Long unitId = unitHead.getUnit().getId();
         log.info("Fetching clearance requests for unit with ID {}", unitId);
 
-        List<ClearanceRequest> requests = clearanceRepo.findAllByUnitId(unitId);
+        List<ClearanceRequest> requests = clearanceRepo.findAllByUnitId(unitId, Role.ADMIN);
 
         return requests.stream()
                 .map(ClearanceMapper::toDto)
@@ -260,7 +260,7 @@ public class ClearanceServiceImpl implements ClearanceService {
         Long unitId = unitHead.getUnit().getId();
         log.info("Fetching clearance history for unit with ID {}", unitId);
 
-        List<ClearanceRequest> requests = clearanceRepo.findAllByUnitId(unitId);
+        List<ClearanceRequest> requests = clearanceRepo.findAllByUnitId(unitId, Role.ADMIN);
 
         return requests.stream()
                 .filter(request -> request.getStatus() != ClearanceStatus.PENDING)
@@ -276,7 +276,7 @@ public class ClearanceServiceImpl implements ClearanceService {
 
         log.info("Fetching new clearance requests for unit with ID {}", unitId);
 
-        List<ClearanceRequest> requests = clearanceRepo.findAllByUnitId(unitId);
+        List<ClearanceRequest> requests = clearanceRepo.findAllByUnitId(unitId, Role.ADMIN);
 
         return requests.stream()
                 .filter(request -> request.getStatus() == ClearanceStatus.PENDING)
@@ -290,7 +290,7 @@ public class ClearanceServiceImpl implements ClearanceService {
 
         log.info("Fetching clearance requests for ppa with ID {}", ppaId);
 
-        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
+        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId, Role.SUPER_ADMIN);
         return requests.stream()
                 .map(ClearanceMapper::toDto)
                 .toList();
@@ -302,7 +302,7 @@ public class ClearanceServiceImpl implements ClearanceService {
 
         log.info("Fetching clearance history for ppa with ID {}", ppaId);
 
-        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
+        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId, Role.SUPER_ADMIN);
 
         return requests.stream()
                 .filter(request -> request.getStatus() != ClearanceStatus.LEVEL_ONE)
@@ -316,7 +316,7 @@ public class ClearanceServiceImpl implements ClearanceService {
 
         log.info("Fetching new clearance requests for ppa with ID {}", ppaId);
 
-        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId);
+        List<ClearanceRequest> requests = clearanceRepo.findAllByPpaId(ppaId, Role.SUPER_ADMIN);
 
         return requests.stream()
                 .filter(request -> request.getStatus() == ClearanceStatus.LEVEL_ONE)

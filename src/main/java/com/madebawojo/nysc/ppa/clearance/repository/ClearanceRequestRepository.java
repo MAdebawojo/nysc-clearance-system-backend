@@ -2,6 +2,7 @@ package com.madebawojo.nysc.ppa.clearance.repository;
 
 
 import com.madebawojo.nysc.ppa.clearance.core.enums.ClearanceStatus;
+import com.madebawojo.nysc.ppa.clearance.core.enums.Role;
 import com.madebawojo.nysc.ppa.clearance.entity.clearance.ClearanceRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,16 +31,18 @@ public interface ClearanceRequestRepository extends JpaRepository<ClearanceReque
 
 //    @Query("SELECT cr FROM ClearanceRequest cr WHERE cr.corper.unit.id = :unitId AND cr.status IN ('LEVEL_ONE', 'PENDING', 'REJECTED')")
     @Query("SELECT cr FROM ClearanceRequest cr " +
-            "WHERE cr.corper.ppa.id = :ppaId " +
+            "WHERE cr.corper.unit.id = :unitId " +
             "AND cr.status IN ('LEVEL_ONE', 'PENDING', 'REJECTED') " +
-            "AND (cr.rejectedBy = 'ADMIN' OR cr.include = true)")
-    List<ClearanceRequest> findAllByUnitId(@Param("unitId") Long unitId);
+            "AND (cr.rejectedBy = :role OR cr.rejectedBy IS NULL)")
+    List<ClearanceRequest> findAllByUnitId(@Param("unitId") Long unitId,
+                                           @Param("role") Role role);
 
     @Query("SELECT cr FROM ClearanceRequest cr " +
             "WHERE cr.corper.ppa.id = :ppaId " +
             "AND cr.status IN ('LEVEL_ONE', 'CLEARED', 'REJECTED') " +
-            "AND (cr.rejectedBy = 'ADMIN' OR cr.include = true)")
-    List<ClearanceRequest> findAllByPpaId(@Param("ppaId") Long ppaId);
+            "AND (cr.rejectedBy = :role OR cr.rejectedBy IS NULL)")
+    List<ClearanceRequest> findAllByPpaId(@Param("ppaId") Long ppaId,
+                                          @Param("role") Role role);
 //    List<ClearanceRequest> findByPpa_Id(Long ppaId);
 
 }
