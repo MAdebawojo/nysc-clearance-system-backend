@@ -261,7 +261,7 @@ public class ClearanceServiceImpl implements ClearanceService {
         log.info("Fetching clearance history for unit with ID {}", unitId);
 
 //        List<ClearanceRequest> requests = clearanceRepo.findAllByUnitId(unitId, Role.ADMIN);
-        List<ClearanceRequest> requests = clearanceRepo.getUnitClearanceHistory(unitId, Role.ADMIN);
+        List<ClearanceRequest> requests = clearanceRepo.getUnitClearanceHistory(unitId);
 
         return requests.stream()
                 .map(ClearanceMapper::toDto)
