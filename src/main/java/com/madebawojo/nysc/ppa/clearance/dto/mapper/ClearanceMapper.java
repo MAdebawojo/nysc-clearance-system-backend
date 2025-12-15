@@ -16,9 +16,15 @@ public class ClearanceMapper {
                 .clearanceMonth(request.getClearanceMonth())
                 .tentativeDate(request.getTentativeDate())
                 .status(request.getStatus())
-                .rejectionReason(request.getRejectionReason())
-                .rejectedBy(request.getRejectedBy().name())
-                .build();
+                .rejectionReason(request.getRejectionReason() != null
+                        ? request.getRejectionReason()
+                        : null
+                )
+                .rejectedBy(
+                        request.getRejectedBy() != null
+                                ? request.getRejectedBy().name()
+                                : null
+                )                .build();
     }
 
     public static CancelClearanceResponseDto cancelResponseDto(ClearanceRequest request) {
