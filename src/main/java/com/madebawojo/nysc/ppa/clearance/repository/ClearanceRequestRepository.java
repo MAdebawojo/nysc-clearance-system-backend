@@ -45,4 +45,17 @@ public interface ClearanceRequestRepository extends JpaRepository<ClearanceReque
                                           @Param("role") Role role);
 //    List<ClearanceRequest> findByPpa_Id(Long ppaId);
 
+    @Query("SELECT cr FROM ClearanceRequest cr " +
+            "WHERE cr.corper.unit.id = :unitId " +
+            "AND cr.status IN ('LEVEL_ONE', 'CLEARED', 'REJECTED') " +
+            "AND (cr.rejectedBy = :role OR cr.rejectedBy IS NULL)")
+    List<ClearanceRequest> getUnitClearanceHistory(@Param("unitId") Long unitId,
+                                           @Param("role") Role role);
+
+    @Query("SELECT cr FROM ClearanceRequest cr " +
+            "WHERE cr.corper.ppa.id = :ppaId " +
+            "AND cr.status IN ('CLEARED', 'REJECTED') " +
+            "AND (cr.rejectedBy = :role OR cr.rejectedBy IS NULL)")
+    List<ClearanceRequest> getPpaClearanceHistory(@Param("ppaId") Long ppaId,
+                                                   @Param("role") Role role);
 }
