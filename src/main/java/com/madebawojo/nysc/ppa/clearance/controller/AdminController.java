@@ -94,8 +94,6 @@ public class AdminController {
         );
     }
 
-
-
     @GetMapping("/{adminId}/unit-id")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @Operation(
@@ -168,27 +166,5 @@ public class AdminController {
         );
     }
 }
-
-
-
-
-
-//@RestController
-//@RequestMapping("/api/v1/admin")
-//@RequiredArgsConstructor
-//public class AdminController {
-//
-//    private final AdminService adminService;
-//
-//    @GetMapping("/profile")
-//    public ResponseEntity<ApiResponseStructure<AdminResponseDto>> getAdminProfile(
-//            @AuthenticationPrincipal(expression = "id") Long userId) {
-//        AdminResponseDto profile = adminService.getAdminProfile(userId);
-//        return ResponseEntity.ok(
-//                ApiResponseStructure.success("Admin profile retrieved successfully", profile, HttpStatus.OK.value())
-//        );
-//    }
-//
-//}
 
 

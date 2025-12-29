@@ -69,42 +69,6 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponseStructure.success("Token refreshed", out, 200));
     }
 
-//    @GetMapping("/verify-email")
-//    @Operation(
-//            summary = "Verify user email",
-//            description = "Verifies a user's email address using a provided verification token."
-//    )
-//    public ResponseEntity<ApiResponseStructure<String>> verifyEmail(@RequestParam String token) {
-//        emailVerificationService.verifyUserByToken(token);
-//        return ResponseEntity.ok(ApiResponseStructure.success("Email verified successfully", null, 200));
-//    }
-
-//    @PostMapping("/set-password")
-//    @Operation(
-//            summary = "Set password after account verification",
-//            description = "Allows users without a password to set one after verifying their email."
-//    )
-//    public ResponseEntity<ApiResponseStructure<String>> setPassword(
-//            @Valid @RequestBody SetPasswordRequestDto request
-//    ) {
-//        authService.setPassword(request.getToken(), request.getNewPassword());
-//        return ResponseEntity.ok(ApiResponseStructure.success("Password set successfully", null, 200));
-//    }
-
-//    @PostMapping("/resend-verification")
-//    @Operation(
-//            summary = "Resend verification email",
-//            description = "Resends the email verification token to a user whose email has not yet been verified."
-//    )
-//    public ResponseEntity<ApiResponseStructure<String>> resendVerification(@Valid @RequestBody ResendVerificationDto dto) {
-//        boolean sent = emailVerificationService.resendVerificationToken(dto.getEmail());
-//        if (sent) {
-//            return ResponseEntity.ok(ApiResponseStructure.success("Verification email resent", null, 200));
-//        } else {
-//            return ResponseEntity.ok(ApiResponseStructure.success("User already verified", null, 200));
-//        }
-//    }
-
     @Operation(
             summary = "Validate setup token",
             description = "Checks if a setup token is valid and not expired before allowing the user to set a password."
@@ -212,5 +176,41 @@ public class AuthController {
 //            @RequestBody RegisterRequest request
 //    ){
 //        return ResponseEntity.ok(authenticationService.register(request));
+//    }
+
+    //    @GetMapping("/verify-email")
+//    @Operation(
+//            summary = "Verify user email",
+//            description = "Verifies a user's email address using a provided verification token."
+//    )
+//    public ResponseEntity<ApiResponseStructure<String>> verifyEmail(@RequestParam String token) {
+//        emailVerificationService.verifyUserByToken(token);
+//        return ResponseEntity.ok(ApiResponseStructure.success("Email verified successfully", null, 200));
+//    }
+
+//    @PostMapping("/set-password")
+//    @Operation(
+//            summary = "Set password after account verification",
+//            description = "Allows users without a password to set one after verifying their email."
+//    )
+//    public ResponseEntity<ApiResponseStructure<String>> setPassword(
+//            @Valid @RequestBody SetPasswordRequestDto request
+//    ) {
+//        authService.setPassword(request.getToken(), request.getNewPassword());
+//        return ResponseEntity.ok(ApiResponseStructure.success("Password set successfully", null, 200));
+//    }
+
+//    @PostMapping("/resend-verification")
+//    @Operation(
+//            summary = "Resend verification email",
+//            description = "Resends the email verification token to a user whose email has not yet been verified."
+//    )
+//    public ResponseEntity<ApiResponseStructure<String>> resendVerification(@Valid @RequestBody ResendVerificationDto dto) {
+//        boolean sent = emailVerificationService.resendVerificationToken(dto.getEmail());
+//        if (sent) {
+//            return ResponseEntity.ok(ApiResponseStructure.success("Verification email resent", null, 200));
+//        } else {
+//            return ResponseEntity.ok(ApiResponseStructure.success("User already verified", null, 200));
+//        }
 //    }
 }

@@ -36,7 +36,9 @@ public class ClearanceController {
     private final ClearanceService clearanceService;
     private final SuperAdminServiceImpl superAdminService;
 
-    // --- CORPER ACTIONS ---
+    //    ##########################################################
+    //                     --- CORPER ACTIONS ---
+    //    ##########################################################
     @PostMapping("/requests")
     @PreAuthorize("hasRole('CORPER')")
     @Operation(
@@ -111,7 +113,9 @@ public class ClearanceController {
         );
     }
 
-    // --- UNIT HEAD ACTIONS ---
+//    ##########################################################
+//                     --- UNIT HEAD ACTIONS ---
+//    ##########################################################
     @PatchMapping("/unit-head/approve/{requestId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
@@ -211,9 +215,10 @@ public class ClearanceController {
         );
     }
 
+    //    ##########################################################
+    //                     --- SUPER ADMIN ACTIONS ---
+    //    ##########################################################
 
-
-    // --- SUPER ADMIN ACTIONS ---
     @PatchMapping("/super-admin/approve/{requestId}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @Operation(

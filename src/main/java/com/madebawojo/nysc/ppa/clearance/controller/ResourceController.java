@@ -25,5 +25,4 @@ public class ResourceController {
 
         return ResponseEntity.ok(ApiResponseStructure.success("Available months retrieved successfully", months, HttpStatus.OK.value()));
     }
-
 }

@@ -20,7 +20,6 @@ public interface ClearanceRequestRepository extends JpaRepository<ClearanceReque
     int deleteByCorper_Id(Long corperId);
 
     // Check if a request already exists for this corper and month
-//    Optional<ClearanceRequest> findByCorper_IdAndClearanceMonth(Long corperId, Month clearanceMonth);
     List<ClearanceRequest> findByCorper_IdAndClearanceMonth(Long corperId, Month clearanceMonth);
 
     // Check if a request already exists for this corper and month
@@ -29,7 +28,12 @@ public interface ClearanceRequestRepository extends JpaRepository<ClearanceReque
     // Optionally, filter by status too
     List<ClearanceRequest> findByCorper_IdAndStatus(Long corperId, ClearanceStatus status);
 
-//    @Query("SELECT cr FROM ClearanceRequest cr WHERE cr.corper.unit.id = :unitId AND cr.status IN ('LEVEL_ONE', 'PENDING', 'REJECTED')")
+    // ##################################################3####################################
+    // These queries need to be optimized. Initially, the design was for the unit head (admin)
+    // to see only pending requests. However, this has changed: the unit head should now also
+    // have access to a history of the requests they approved, along with the final status after
+    // each request is actioned by the super admin.
+    // #########################################################################################
     @Query("SELECT cr FROM ClearanceRequest cr " +
             "WHERE cr.corper.unit.id = :unitId " +
             "AND cr.status IN ('LEVEL_ONE', 'PENDING', 'REJECTED') " +
@@ -43,7 +47,6 @@ public interface ClearanceRequestRepository extends JpaRepository<ClearanceReque
             "AND (cr.rejectedBy = :role OR cr.rejectedBy IS NULL)")
     List<ClearanceRequest> findAllByPpaId(@Param("ppaId") Long ppaId,
                                           @Param("role") Role role);
-//    List<ClearanceRequest> findByPpa_Id(Long ppaId);
 
     @Query("SELECT cr FROM ClearanceRequest cr " +
             "WHERE cr.corper.unit.id = :unitId " +
