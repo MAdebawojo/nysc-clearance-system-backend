@@ -1,194 +1,144 @@
-# 🤝 README
+# Auto-Clearance API
 
-This project provides a comprehensive API for managing various aspects of the National Youth Service Corps (NYSC) program, with a focus on **Places of Primary Assignment (PPAs)**. The API supports a wide range of administrative and user-specific tasks, from managing user credentials to handling clearance documents.
+## Project Ideator & Lead
+**Adebawojo Mosopefoluwa O.**  
+As the ideator of the Auto-Clearance system, I conceived the idea, designed the system architecture, and led the development of the backend. I was responsible for turning the vision into a functional, production-ready solution.
 
----
-
-## 🔑 Authentication
-
-All API endpoints are protected and require a valid **Bearer token** for access. This ensures that only authenticated and authorized users can interact with the system's functionalities.
-
-### Authentication Endpoints
-
-These endpoints are for managing user sessions and credentials.
-
-* `POST /api/v1/auth/login`: Authenticates a user and returns JWT tokens.
-* `POST /api/v1/auth/setup-password`: Allows a new user to set their password using a setup token.
-* `GET /api/v1/auth/validate-setup-token`: Checks if a setup token is valid and not expired.
-* `POST /api/v1/auth/forgot-password`: Initiates the password reset process by sending a link to the user's email.
-* `GET /api/v1/auth/reset-password/validate`: Validates a password reset token before allowing a password change.
-* `POST /api/v1/auth/reset-password`: Resets a user's password using a valid reset token.
-* `POST /api/v1/auth/resend-setup`: Resends a password setup email to a user who hasn’t set one yet.
-* `PUT /api/v1/user/credentials`: Updates the credentials of the authenticated user.
-* `POST /api/v1/auth/refresh`: Refreshes JWT tokens using a refresh token.
-* `POST /api/v1/auth/logout`: Logs out a single device by invalidating its refresh token.
-* `POST /api/v1/auth/logout-all`: Logs the user out of all active sessions.
+## Collaborator
+**Ekemini Eduok**  
+Worked on the frontend part of the application.
 
 ---
 
-## 🗂️ API Endpoints
+## Project Overview
 
-The API is logically grouped into several categories to provide clear and organized access to different functionalities.
+Auto-Clearance is an automated system designed to streamline the Human Resources (HR) workflow for clearing National Youth Service Corps (NYSC) members (Corpers).
 
-### **Admins**
+Each corper is required to present a monthly clearance document issued by their Place of Primary Assignment (PPA). Traditionally, this document is manually tailored for each corper using a predefined template, which can be repetitive, time-consuming, and prone to error.
 
-These endpoints are for managing **Admin** accounts and profiles. Certain actions are restricted to **Super Admins**.
-
-* `POST /api/v1/admins`: Creates a new **Admin** account. This requires a **SUPER_ADMIN** role.
-* `GET /api/v1/admins`: Retrieves a list of all **Admins**. This requires a **SUPER_ADMIN** role.
-* `GET /api/v1/admins/me`: Retrieves the profile of the currently authenticated **Admin**.
-* `GET /api/v1/admins/{adminId}`: Retrieves the details of an **Admin** by their ID. This requires a **SUPER_ADMIN** role.
-* `GET /api/v1/admins/{adminId}/unit-id`: Retrieves the **Unit ID** associated with a given **Admin**. This requires a **SUPER_ADMIN** role.
-* `PUT /api/v1/admins/{adminId}`: Updates an **Admin's** profile by their ID. This requires a **SUPER_ADMIN** role.
-* `DELETE /api/v1/admins/{adminId}`: Deletes an **Admin** account by ID. This requires a **SUPER_ADMIN** role.
+Auto-Clearance eliminates this manual process by automating the generation and delivery of clearance documents based on each corper’s clearance request, saving time and improving efficiency.
 
 ---
 
-### **Clearance Controllers**
+## Problem Statement
 
-These endpoints manage the clearance request process for **Corp Members**, **Unit Heads**, and **Super Admins**.
+NYSC mandates that all corpers present monthly clearance documents from their respective PPAs. Preparing these documents manually for multiple corpers involves repetitive editing and administrative overhead.
 
-* `POST /api/v1/clearances/requests`: Allows a **Corper** to create a new clearance request for a given month.
-* `GET /api/v1/clearances/requests`: Fetches all clearance requests created by the currently authenticated **Corper**.
-* `PATCH /api/v1/clearances/requests/{id}/cancel`: Allows a **Corper** to cancel a pending clearance request.
-* `GET /api/v1/clearances/unit-head/requests`: Fetches all clearance requests submitted within a unit.
-* `POST /api/v1/clearances/unit-head/approve/{requestId}`: Allows a **Unit Head** to approve a clearance request within their unit.
-* `POST /api/v1/clearances/unit-head/reject/{requestId}`: Allows a **Unit Head** to reject a clearance request with a specified reason.
-* `GET /api/v1/clearances/ppa/requests`: Fetches all clearance requests associated with the **Super Admin’s** PPA.
-* `POST /api/v1/clearances/super-admin/approve/{requestId}`: Allows a **Super Admin** to approve a clearance request.
-* `POST /api/v1/clearances/super-admin/reject/{requestId}`: Allows a **Super Admin** to reject a clearance request with a specified reason.
+Auto-Clearance addresses this challenge by:
+- Automating clearance requests
+- Introducing an approval workflow
+- Generating clearance documents programmatically once approvals are complete
 
 ---
 
-### **Clearance Documents**
+## System Overview
 
-These endpoints are for generating and managing clearance documents.
+The system supports four major user roles:
 
-* `GET /api/v1/clearance-docs/{requestId}/view`: Streams a clearance letter as a PDF for a given request ID. Restricted to **SUPER_ADMIN**.
-* `GET /api/v1/clearance-docs/{requestId}/download`: Downloads a clearance letter as a PDF for a given request ID. Restricted to **SUPER_ADMIN**.
-
----
-
-### **Corp Members**
-
-These endpoints are for managing **Corp Member** accounts, profiles, and assignments.
-
-* `POST /api/v1/corpers`: Registers a new **Corper**. This is restricted to **ADMIN** and **SUPER_ADMIN** roles.
-* `GET /api/v1/corpers/me`: Retrieves the profile of the currently authenticated **Corper**.
-* `PUT /api/v1/corpers/me`: Updates the profile of the currently authenticated **Corper**.
-* `GET /api/v1/corpers/{id}`: Retrieves a **Corper's** profile by ID. This is accessible to **Admins**.
-* `PUT /api/v1/corpers/{id}`: Updates a **Corper's** profile by ID. This is accessible to **Admins**.
-* `DELETE /api/v1/corpers/{id}`: Deletes a **Corper** account. This is restricted to **Admins** and **Super Admins**.
-* `GET /api/v1/corpers/unit/{unitId}`: Retrieves all **Corpers** within a specific **Unit**. This is accessible to **Admins**.
-* `GET /api/v1/corpers/ppa/{ppaId}`: Retrieves all **Corpers** within a specific **PPA**. This is restricted to **Super Admins**.
-* `PUT /api/v1/corpers/{id}/unblock`: Unblocks a **Corper** account. This is restricted to **Super Admins**.
-* `PUT /api/v1/corpers/{id}/block`: Blocks a **Corper** account. This is restricted to **Super Admins**.
+- **Global Admin** – Manages multiple PPAs and assigns Superadmins
+- **Superadmin** – Oversees clearance approvals for a specific PPA
+- **Admin (Unit Head)** – Manages units and performs first-level approval
+- **Corper** – Requests clearance and receives the generated document
 
 ---
 
-### **PPAs**
+## System Architecture
 
-These endpoints are for managing **Places of Primary Assignment (PPAs)**. Access is restricted to **Global Admins**.
-
-* `POST /api/v1/ppas`: Creates a new **PPA**.
-* `GET /api/v1/ppas`: Fetches a list of all **PPAs**.
-* `GET /api/v1/ppas/{id}`: Fetches a specific **PPA** by its ID.
-* `PUT /api/v1/ppas/{id}`: Updates the details of a specific **PPA** by ID.
-* `DELETE /api/v1/ppas/{id}`: Deletes a specific **PPA** by ID.
+- **Backend:** Java 21, Spring Boot 3
+- **Frontend:** React
+- **Database:** Stores PPAs, users, units, clearance requests, and related metadata
 
 ---
 
-### **Resources**
+## Roles & Responsibilities
 
-This endpoint provides general resources for the application.
+### 1. Global Admin
+- Manages multiple PPAs
+- Creates PPAs and assigns Superadmins
+- A Global Admin is seeded on first application startup
+- On subsequent restarts, the system checks for an existing Global Admin to prevent duplication
 
-* `GET /api/v1/resources/clearance-months`: Retrieves a list of available months for clearance requests.
+### 2. Superadmin (PPA HR)
+- Each PPA has one Superadmin
+- Manages units and unit heads (Admins)
+- Performs final approval or rejection of clearance requests
 
----
+### 3. Admin (Unit Head)
+- Manages a unit within a PPA
+- Approves or rejects clearance requests for corpers within their unit
 
-### **Super Admins**
-
-These endpoints are for managing **Super Admin** accounts. Some actions are restricted to **Global Admins**.
-
-* `POST /api/v1/super-admin`: Creates a new **Super Admin** account. This is restricted to **Global Admins**.
-* `GET /api/v1/super-admin/me`: Retrieves the profile of the currently authenticated **Super Admin**.
-* `PUT /api/v1/super-admin/me`: Updates the profile of the currently authenticated **Super Admin**.
-* `GET /api/v1/super-admin/{id}`: Fetches the profile of a **Super Admin** by their ID. This requires a **GLOBAL_ADMIN** role.
-* `PUT /api/v1/super-admin/{id}`: Updates a **Super Admin's** profile by their user ID.
-* `DELETE /api/v1/super-admin/{id}`: Deletes a **Super Admin** account by ID. This requires a **SUPER_ADMIN** role.
-
----
-
-### **Units**
-
-These endpoints are for managing **Units** within **PPAs** and are restricted to users with the **SUPER_ADMIN** role.
-
-* `POST /api/v1/units`: Creates a new **Unit** under a PPA.
-* `GET /api/v1/units/{id}`: Retrieves the details of a specific **Unit** by its ID.
-* `PUT /api/v1/units/{id}`: Updates an existing **Unit** using its ID.
-* `DELETE /api/v1/units/{id}`: Deletes a **Unit** by its ID.
-* `GET /api/v1/units/ppa/{ppaId}`: Retrieves all **Units** belonging to a specific **PPA**.
+### 4. Corper (NYSC Member)
+- Submits clearance requests
+- Receives clearance documents after full approval
 
 ---
 
-## 🖥️ Schema Definitions
+## Workflow
 
-The API uses specific schemas for requests and responses.
+1. Global Admin creates a PPA and assigns a Superadmin
+2. Superadmin creates units, assigns unit heads (Admins), and registers corpers
+3. A corper submits a clearance request (status: `PENDING`)
+4. The unit head reviews the request:
+    - If approved → status becomes `LEVEL_ONE`
+    - If rejected → status becomes `REJECTED`
+5. The Superadmin reviews requests with `LEVEL_ONE` status:
+    - If approved → status becomes `CLEARED`
+    - If rejected → status becomes `REJECTED`
+6. Once approved at both levels, the clearance document is generated and delivered to the corper
 
-### Request DTOs (Data Transfer Objects)
+---
 
-* `AdminRequestDto`: Request body for creating a new **Admin**.
-* `AuthenticationRequestDto`: Request body for user login, including `email` and `password`.
-* `CancelClearanceRequestDto`: Request body for canceling a clearance request, including `request_id` and `cancellation_reason`.
-* `ClearanceRequestDto`: Request body for creating a new clearance request, including `tentative_date` and `clearance_month`.
-* `CorperRequestDto`: Request body for creating or updating a **Corper**.
-* `ForgotPasswordRequestDto`: Request body for initiating a password reset, with the user's `email`.
-* `PpaRequestDto`: Request body for creating a new **PPA**, with `ppa_name` and `ppa_address`.
-* `RefreshTokenRequest`: Request body for refreshing tokens or logging out, containing a `refresh_token`.
-* `RejectClearanceRequestDto`: Request body for rejecting a clearance request, with a `reason`.
-* `ResendSetupDto`: Request body for resending a password setup email, containing the user's `email`.
-* `ResetPasswordRequestDto`: Request body for resetting a password, with `reset_token` and `new_password`.
-* `SetupPasswordRequestDto`: Request body for setting a new password, with `password`, `confirm_password`, and `setup_token`.
-* `SuperAdminRequestDto`: Request body for creating a new **Super Admin**.
-* `UnitRequestDto`: Request body for creating or updating a **Unit**.
-* `UpdateAdminRequestDto`: Request body for updating an **Admin** profile.
-* `UpdateCredentialsRequestDto`: Request body for updating user credentials.
-* `UpdatePpaRequestDto`: Request body for updating a **PPA**.
-* `UpdateSuperAdminRequestDto`: Request body for updating a **Super Admin** profile.
+## Clearance Request Statuses
 
-### Response DTOs (Data Transfer Objects)
+- **PENDING** – Initial state after submission
+- **LEVEL_ONE** – Approved by unit head
+- **CLEARED** – Fully approved by Superadmin
+- **REJECTED** – Rejected at any stage
 
-* `AdminResponseDto`: Response body for retrieving an **Admin** profile.
-* `AuthenticationResponseDto`: Response body after successful authentication, containing user details and tokens.
-* `CancelClearanceResponseDto`: Response body after a successful cancellation of a clearance request.
-* `ClearanceResponseDto`: Response body for a clearance request.
-* `CorperResponseDto`: Response body for creating or retrieving a **Corper**.
-* `PpaResponseDto`: Response body for creating or retrieving a **PPA**.
-* `RejectClearanceDto`: Response body for a rejected clearance request.
-* `SuperAdminResponseDto`: Response body for creating or retrieving a **Super Admin**.
-* `TokenResponse`: Response body containing `access_token` and `refresh_token`.
-* `UnitResponseDto`: Response body for creating or retrieving a **Unit**.
+---
 
-### Generic API Response Structures
+## API Documentation
 
-These are wrapper objects that provide consistent formatting for all API responses, including status and error messages.
+### Swagger UI
+- Local:  
+  `http://localhost:8080/swagger-ui/index.html`
+- Deployed:  
+  `https://nysc-clearance-system-backend-demo-test.onrender.com/swagger-ui/index.html`
 
-* `ApiResponseStructureAdminResponseDto`
-* `ApiResponseStructureAuthenticationResponseDto`
-* `ApiResponseStructureCancelClearanceResponseDto`
-* `ApiResponseStructureClearanceResponseDto`
-* `ApiResponseStructureCorperResponseDto`
-* `ApiResponseStructureListAdminResponseDto`
-* `ApiResponseStructureListClearanceResponseDto`
-* `ApiResponseStructureListCorperResponseDto`
-* `ApiResponseStructureListPpaResponseDto`
-* `ApiResponseStructureListString`
-* `ApiResponseStructureListUnitResponseDto`
-* `ApiResponseStructureLong`
-* `ApiResponseStructureObject`
-* `ApiResponseStructurePpaResponseDto`
-* `ApiResponseStructureRejectClearanceDto`
-* `ApiResponseStructureString`
-* `ApiResponseStructureSuperAdminResponseDto`
-* `ApiResponseStructureUnitResponseDto`
-* `ApiResponseStructureVoid`
+---
+
+## Future Improvements
+
+- **Pagination:**  
+  Implement API-level pagination to improve performance when handling large datasets.
+---
+
+## Setup Instructions
+
+### Environment Variables
+Review the `.env.example` file and provide values for all required environment variables.
+
+---
+
+### Database Configuration
+1. Create a local database (e.g. `auto_clearance_db`)
+2. Update the following variables in your environment:
+    - `DB_USER`
+    - `DB_PASSWORD`
+
+---
+
+### Email Configuration
+The application requires a Google App Password for email functionality.
+
+1. Generate an App Password:  
+   https://myaccount.google.com/apppasswords
+
+2. Video guide:  
+   https://www.youtube.com/shorts/WDfvVRVV8Js
+
+3. Set the following variables:
+    - `EMAIL_USER` → Email address used to generate the App Password
+    - `EMAIL_PASSWORD` → Generated App Password
+
+---
